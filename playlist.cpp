@@ -5,12 +5,12 @@
 #include "include/song.h"
 #include "playlist.h"
 using namespace std;
+
 class playlist {
 private:
 		string name;
 		vector<Song> defaultplay;
 public:
-	
 	//constructor
 	playlist(const string& n) : name(n) {}
 		//getter and setter
@@ -38,5 +38,18 @@ public:
 		// to find a specific song in the playlist by title/ID momken neshof anhy ashl w ne3mlha
 		int findSongByID(int songID) const;
 		int findSongByTitle(const string& title) const;
-
 };
+
+
+// void importFolder(string folder) {
+//     for (const auto & entry : fs::directory_iterator(folder)) {
+//         if (entry.path().extension() == ".mp3") {
+//             mp3METADATA(entry.path().string());
+//         }
+//     }
+// }
+//
+// int main() {
+//     importFolder("C:/Users/Hassan/Music/");
+//     return 0;
+// }
