@@ -8,19 +8,19 @@ using namespace std;
 class playlist {
 private:
 		string name;
-		vector<Song> songs;
+		vector<Song> defaultplay;
 public:
+	
 	//constructor
 	playlist(const string& n) : name(n) {}
 		//getter and setter
 		string getName() const { return name; }	
 		void setName(const string& n) { return name = n; }
-		int getSize() const { return songs.size(); }
+		int getSize() const { return defaultplay.size(); }
 		//function declaration
 		// basic functions
 		void addSong(const Song& s) {    //add to playlist
-		.
-		
+			defaultplay.push(s);
 		};
 		bool removeSong(int songID);
 		void clear();
