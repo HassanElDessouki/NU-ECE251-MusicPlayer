@@ -19,7 +19,7 @@ public:
 		//function declaration
 		// basic functions
 		void addSong(const Song& s) {    //add to playlist
-		
+		.
 		
 		};
 		bool removeSong(int songID);
