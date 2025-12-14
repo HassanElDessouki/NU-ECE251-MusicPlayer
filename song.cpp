@@ -1,24 +1,33 @@
+// ======================================================== //
 #include "include/song.h"
+#include <iostream>
 #include <filesystem>
 #include <string>
+// ====================MP3 Audio Player==================== //
+#define MINIAUDIO_IMPLEMENTATION
+#include "miniaudio/miniaudio.h"
+// =====================MP3 Audio Tags===================== //
 #include <taglib/fileref.h>
 #include <taglib/tag.h>
+// ======================================================== //
+
 namespace fs = std::filesystem;
 
 Song::Song(
 	const std::string& path,										// filePath
-	const std::string& t,										// MP3 Title
-	const std::string& a,										// Artist
-	const std::string& al,										// Album
-	const std::string& g,										// Genre
-	int id,													// Genre
+	const std::string& t,											// MP3 Title
+	const std::string& a,											// Artist
+	const std::string& al,											// Album
+	const std::string& g,											// Genre
+	int id,															// Genre
 	int pc,
 	int dur)
-	: filepath(path), title(t), artist(a), album(al), genre(g), song_Id(id), playCount(pc), duration(dur) {
+	: filePath(path), title(t), artist(a), album(al), genre(g), song_Id(id), playCount(pc), duration(dur) {
 }
 
 bool Song::loadMetadata() {
-	TagLib::FileRef f((filepath.data()));
+	TagLib::FileRef f((filePath.data()));
+    if (f.isNull()) { std::cout << "Could not open file or no tags found: " << std::endl; return false; }
 	if (!f.isNull() && f.tag()) {
 	  	TagLib::Tag *tag = f.tag();
 	    title 	= tag->title().toCString(true);
@@ -30,7 +39,6 @@ bool Song::loadMetadata() {
 //	    Track: tag->track();
         return true;
 	} else {
-	    std::cout << "Could not open file or no tags found: " << std::endl;
         return false;
 	}
 }
@@ -41,10 +49,24 @@ void Song::displayInfo() const {
 	std::cout << "Album: " << album << std::endl;
 	std::cout << "Genre: " << genre << std::endl;
 	std::cout << "Duration: " << duration << " sec" << std::endl;
-	std::cout << "Filepath: " << filepath << std::endl;
+	std::cout << "File Path: " << filePath << std::endl;
 	std::cout << "Play Count: " << playCount << std::endl;
 }
 
-// void mp3METADATA(string filename) {
+bool Song::playSong() {
+	ma_result result;
+	ma_engine engine;
 
-// }
+	result = ma_engine_init(NULL, &engine);
+	if (result != MA_SUCCESS) {
+		return 0;
+	}
+
+	ma_engine_play_sound(&engine, filePath.c_str(), NULL);
+
+	printf("Press Enter to quit...");
+	getchar();
+
+	ma_engine_uninit(&engine);
+    return 1;
+}

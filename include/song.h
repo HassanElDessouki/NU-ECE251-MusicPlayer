@@ -6,7 +6,7 @@ class Song {
 	private:
 		std::string title;
 		std::string artist;
-		std::string filepath;
+		std::string filePath;
 		std::string album;
 		std::string genre;
 		int duration; // in sec
@@ -31,7 +31,7 @@ class Song {
 		std::string getArtist() const { return artist; }
 		std::string getAlbum() const { return album; }
 		std::string getGenre() const { return genre; }
-		std::string getFilepath() const { return filepath; }
+		std::string getFile() const { return filePath; }
 		int getDuration() const { return duration; }
 		int getSongId() const { return song_Id; }
 		int getPlayCount() const { return playCount; }
@@ -41,8 +41,10 @@ class Song {
 		void setArtist(const std::string& a) { artist = a; }
 		void setAlbum(const std::string& al) { album = al; }
 		void setGenre(const std::string& g) { genre = g; }
+
 	//function declaration
 		void incrementPlayCount(){playCount++;}
 		bool loadMetadata();
 		void displayInfo() const;
+		bool playSong();
 };
