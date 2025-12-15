@@ -118,13 +118,6 @@ void Playlist::loadPlaylist() {
 	PlaylistData.close();
 }
 
-// void importFolder(string folder) {
-//     for (const auto & entry : fs::directory_iterator(folder)) {
-//         if (entry.path().extension() == ".mp3") {
-//             mp3METADATA(entry.path().string());
-//         }
-//     }
-// }
 //
 void Playlist::play() {
 	// otherwise, traverse through the list and print the values until the end of the list
