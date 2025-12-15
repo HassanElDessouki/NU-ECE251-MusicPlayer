@@ -61,15 +61,23 @@ void Playlist::deleteSong(Song *song) {
 	}
 }
 
-		// displaying playlist
-		void displayPlaylist() const;
-		void saveToFile(const string& filename) const;
-		void loadFromFile(const string& filename);
-
-		// to find a specific song in the playlist by title/ID momken neshof anhy ashl w ne3mlha
-		int findSongByID(int songID) const;
-		int findSongByTitle(const string& title) const;
-};
+void Playlist::displayPlaylist() {
+	// if head is null, print message to user that the list is empty
+	if (head == nullptr) {
+		cout << "List is empty!" << endl;
+		return;
+	}
+	// otherwise, traverse through the list and print the values until the end of the list
+	PlaylistNode *currentNode = head;
+	do {
+		cout << currentNode->song->getTitle();
+		currentNode = currentNode->next;
+		if (currentNode != head) {
+			cout << "<->";              // this is so that we do not get an extra <-> at the end of the text :-)
+		}
+	} while (currentNode != head);
+	cout << endl;
+}
 
 
 // void importFolder(string folder) {
