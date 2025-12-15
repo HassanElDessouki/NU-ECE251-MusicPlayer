@@ -120,7 +120,22 @@ void Playlist::loadPlaylist() {
 //     }
 // }
 //
-// int main() {
-//     importFolder("C:/Users/Hassan/Music/");
-//     return 0;
-// }
+void Playlist::play() {
+	// otherwise, traverse through the list and print the values until the end of the list
+	PlaylistNode *currentNode = head;
+	do {
+          printf("Now playing %s\n", currentNode->song->getTitle().c_str());
+       	currentNode->song->playSong();
+		currentNode = currentNode->next;
+	} while (currentNode != head);
+	cout << endl;
+};
+
+void importFolder(string folder) {
+    for (const auto & entry : filesystem::directory_iterator(folder)) {
+        if (entry.path().extension() == ".mp3") {
+            return;
+        }
+    }
+}
+
