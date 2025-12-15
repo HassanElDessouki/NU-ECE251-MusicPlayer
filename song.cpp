@@ -15,6 +15,7 @@ namespace fs = std::filesystem;
 
 Song::Song(
 	const std::string& path,										// filePath
+	int id,
 	const std::string& t,											// MP3 Title
 	const std::string& a,											// Artist
 	const std::string& al,											// Album
