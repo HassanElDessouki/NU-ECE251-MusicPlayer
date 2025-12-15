@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.30)
-project(ECE251)
+project(MusicPlayer)
 
 set(CMAKE_CXX_STANDARD 20)
 
