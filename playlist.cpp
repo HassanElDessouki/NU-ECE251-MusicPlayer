@@ -6,24 +6,21 @@
 #include "playlist.h"
 using namespace std;
 
-class playlist {
-private:
-		string name;
-		vector<Song> defaultplay;
-public:
-	//constructor
-	playlist(const string& n) : name(n) {}
-		//getter and setter
-		string getName() const { return name; }	
-		void setName(const string& n) { return name = n; }
-		int getSize() const { return defaultplay.size(); }
-		//function declaration
-		// basic functions
-		void addSong(const Song& s) {    //add to playlist
-			defaultplay.push(s);
-		};
-		bool removeSong(int songID);
-		void clear();
+void Playlist::insertSong(Song *song) {
+	PlaylistNode *newNode = new PlaylistNode;           //
+	newNode->song = song;                // create new node with the value to be inserted
+
+	if (head == nullptr) {              // in the case that head is a null, initialize list by storing memory address of the node as the head
+		head = newNode;
+		head->next = head;
+		head->prev = head;
+	} else {
+		newNode->prev = head->prev;         //
+		newNode->next = head;               //
+		head->prev->next = newNode;         //
+		head->prev = newNode;               //
+	}
+}
 
 		// getting Information
 		bool isEmpty() const { return size == 0; }
