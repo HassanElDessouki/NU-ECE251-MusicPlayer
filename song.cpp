@@ -1,4 +1,5 @@
 // ======================================================== //
+#pragma once
 #include "include/song.h"
 #include <iostream>
 #include <filesystem>
