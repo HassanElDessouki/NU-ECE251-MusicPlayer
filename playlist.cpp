@@ -138,3 +138,30 @@ void importFolder(string folder) {
     }
 }
 
+void Playlist::savePlaylist() {
+	ofstream playlistData;
+	playlistData.open(playlistFile); // Load File
+
+	PlaylistNode *currentNode = head;
+	do {
+		stringstream playlistSongDataStream;
+
+		string filePath, title, artist, album, genre;
+		int songID, songDuration, songPlayCount;
+		filePath = currentNode->song->getFile();
+        title = currentNode->song->getTitle();
+        artist = currentNode->song->getArtist();
+		album = currentNode->song->getAlbum();
+        genre = currentNode->song->getGenre();
+        songID = currentNode->song->getSongID();
+        songDuration = currentNode->song->getDuration();
+        songPlayCount = currentNode->song->getPlayCount();
+
+		playlistSongDataStream << filePath << "," << songID << "," << title << "," << artist << "," << album << "," << genre << "," << songDuration << "," << songPlayCount;
+        playlistData << playlistSongDataStream.str() << endl;
+		currentNode = currentNode->next;
+	} while (currentNode != head);
+
+	playlistData.close();
+}
+
