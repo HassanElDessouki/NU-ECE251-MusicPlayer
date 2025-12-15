@@ -20,10 +20,10 @@ Song::Song(
 	const std::string& a,											// Artist
 	const std::string& al,											// Album
 	const std::string& g,											// Genre
-	int id,															// Genre
-	int pc,
-	int dur)
-	: filePath(path), title(t), artist(a), album(al), genre(g), song_Id(id), playCount(pc), duration(dur) {
+	int dur,
+    int pc
+)
+	: filePath(path), song_Id(id), title(t), artist(a), album(al), genre(g), duration(dur),playCount(pc) {
 }
 
 bool Song::loadMetadata() {
