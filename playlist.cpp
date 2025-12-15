@@ -79,6 +79,38 @@ void Playlist::displayPlaylist() {
 	cout << endl;
 }
 
+void Playlist::loadPlaylist() {
+	ifstream PlaylistData;       		// file stream "playlistData"
+	PlaylistData.open(playlistFile); 	// Load File
+
+	if (!PlaylistData.is_open()) {
+		cout << "[ERROR] Could not open playlist file!" << endl;  // ← Add this
+		return;
+	}
+
+	string csvRow;
+	while(getline(PlaylistData, csvRow)) {
+		stringstream csvRowSS(csvRow); // Move Row to a String Stream
+		string cell;
+
+		// DEBUG
+		// cout << csvRow << endl;
+		string filePath, title, artist, album, genre;
+		int songID, songDuration, songPlayCount;
+		/* Seperate each value to its designated song struct variable */
+		getline(csvRowSS, cell, ','); filePath 			= cell;
+		getline(csvRowSS, cell, ','); songID 			= stoi(cell);
+		getline(csvRowSS, cell, ','); title 			= cell;
+		getline(csvRowSS, cell, ','); artist 			= cell;
+		getline(csvRowSS, cell, ','); album 			= cell;
+		getline(csvRowSS, cell, ','); genre 			= cell;
+		getline(csvRowSS, cell, ','); songDuration 		= stoi(cell);
+		getline(csvRowSS, cell, ','); songPlayCount 	= stoi(cell);
+		Song* n = new Song(filePath, songID, title, artist, album, genre, songDuration, songPlayCount);
+		insertSong(n);
+	}
+	PlaylistData.close();
+}
 
 // void importFolder(string folder) {
 //     for (const auto & entry : fs::directory_iterator(folder)) {
