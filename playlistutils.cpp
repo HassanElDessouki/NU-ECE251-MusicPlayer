@@ -1,5 +1,4 @@
 // ======================================================== //
-#pragma once
 #include "include/playlistutils.h"
 #include "include/playlist.h"
 #include "include/song.h"
@@ -41,7 +40,9 @@ Playlist* createPlaylist(const string& name) {
         cout << "[INFO] Adding playlist to the settings file" << endl;
 
         ofstream playlistSettingsWrite("playlists.csv", ios::app);
+//        playlistSettingsWrite << name << ";" << fileName << ";" << dateCreated << ";" << dateModified << ";" << songCount << ";" << totalDuration << ";" << description << ";" << endl;
         playlistSettingsWrite << name << ";" << fileName << endl;
+
         playlistSettingsWrite.close();
         cout << "[SUCCESS] Successfully added playlist back to the settings file" << endl;
 
@@ -73,11 +74,9 @@ void deletePlaylist(const string& name) {
 vector<string> listAllPlaylists()       {
     vector<string> playlists;
     ifstream playlistSettings("playlists.csv");
-    playlistSettings.open("playlists.csv");
 
     if (!playlistSettings.is_open()) {
-        cout << "[ERROR] Could not open playlist file!" << endl;  // ← Add this
-        // ERROR HANDLING MISSING!!!!!!!!!!!!!
+        cout << "[ERROR] Could not open playlist file!" << endl;
         return playlists;
     }
 
@@ -95,7 +94,6 @@ vector<string> listAllPlaylists()       {
         /* Seperate each value to its designated playlist struct variable */
         getline(csvRowSS, cell, ';'); playlistName 			= cell;
         getline(csvRowSS, cell, ';'); playlistFile 			= cell;
-        cout << playlistName << endl;
         playlists.push_back(playlistName);
     }
     playlistSettings.close();
@@ -107,7 +105,6 @@ bool playlistExists(const string& name) {
 
     if (!playlistSettings.is_open()) {
         cout << "[ERROR] Could not open playlist file!" << endl;  // ← Add this
-        // ERROR HANDLING MISSING!!!!!!!!!!!!!
         return 0;
     }
 
@@ -131,6 +128,6 @@ bool playlistExists(const string& name) {
         }
     }
     cout << "[ERROR] Could not find playlist!" << endl;
-    return 0;
     playlistSettings.close();
+    return 0;
 };
