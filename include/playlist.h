@@ -16,6 +16,10 @@ class Playlist {
 			PlaylistNode *prev;
 		};
 		PlaylistNode *head;
+		string dateCreated;
+		string dateModified;
+		int songCount;
+		int totalDuration;
 
 	public:
 		//constructor
