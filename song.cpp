@@ -65,7 +65,6 @@ bool Song::playSong() {
 	}
 
 	ma_engine_play_sound(&engine, filePath.c_str(), NULL);
-
 	printf("Press Enter to quit...");
 	getchar();
 

@@ -17,13 +17,13 @@ class Song {
 		//constructor
 		Song(
 			const std::string& path,
+			int id = 0,
 			const std::string& t = "",
 			const std::string& a = "",
 			const std::string& al = "",
 			const std::string& g = "",
-			int id = 0,
-			int pc = 0,
-			int dur = 0
+			int dur = 0,
+			int pc = 0
         );
 
 	//getter
@@ -33,7 +33,7 @@ class Song {
 		std::string getGenre() const { return genre; }
 		std::string getFile() const { return filePath; }
 		int getDuration() const { return duration; }
-		int getSongId() const { return song_Id; }
+		int getSongID() const { return song_Id; }
 		int getPlayCount() const { return playCount; }
 
 	//setter
