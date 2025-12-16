@@ -2,39 +2,50 @@
 #include <string>
 #include <iostream>
 #include <vector>
-#include "song.h"
+#include "include/song.h"
+
 using namespace std;
 
 class Playlist {
-private:
-	string name;
-	vector<Song> songs;
+	private:
+		string playlistName;
+		string playlistFile;
+		struct PlaylistNode {
+			Song *song;
+			PlaylistNode *next;
+			PlaylistNode *prev;
+		};
+		PlaylistNode *head;
 
-public:
-	//constructor
-	Playlist(const string& n);
-	//getter and setter
-	string getName() const { return name; }	
-	void setName(const string& n) { name = n; }
+	public:
+		//constructor
+		Playlist(const string& n, const string& f) {playlistName = n; playlistFile = f; head = nullptr;};
 
-	// basic functions
-	void addSong(const Song& s);
-	bool removeSong(int songID);        
-	void clear();                       
+        void insertSong(Song *song);
+		void deleteSong(Song *song);
+		void displayPlaylist();
 
-	// getting Information
-	int getSize() const; //how many songs in playlist   
-	bool isEmpty() const;               
-	int getTotalDuration() const;                  
-	
+		void play();
 
-	// displaying playlist
-	void displayPlaylist() const;
-	void saveToFile(const string& filename) const;
-	void loadFromFile(const string& filename);
+		//getter and setter
+		string getName() const { return playlistName; }
+		void setName(const string& n) { playlistName = n; }
 
-	// to find a specific song in the playlist by title/ID momken neshof anhy ashl w ne3mlha
-	int findSongByID(int songID) const;
-	int findSongByTitle(const string& title) const;
+		// basic functions
+		void clear();
+
+		// getting Information
+		int getSize() const; //how many songs in playlist
+		bool isEmpty() const;
+		int getTotalDuration() const;
+
+		// displaying playlist
+		void loadPlaylist();
+		void savePlaylist();
+
+		void importFolder(string folder);
+
+		// to find a specific song in the playlist by title/ID momken neshof anhy ashl w ne3mlha
+		int findSongByID(int songID) const;
+		int findSongByTitle(const string& title) const;
 };
-
