@@ -1,5 +1,4 @@
 // ======================================================== //
-#pragma once
 #include "include/playlist.h"
 #include "include/song.h"
 #include <string>
