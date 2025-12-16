@@ -1,5 +1,4 @@
 // ======================================================== //
-#pragma once
 #include "include/playlist.h"
 #include "include/song.h"
 #include <string>
@@ -125,7 +124,7 @@ void Playlist::play() {
 	// otherwise, traverse through the list and print the values until the end of the list
 	PlaylistNode *currentNode = head;
 	do {
-        printf("Now playing %s\n", currentNode->song->getTitle().c_str());
+        printf("Now playing %s by %s\n", currentNode->song->getTitle().c_str(), currentNode->song->getArtist().c_str());
        	currentNode->song->playSong();
         savePlaylist();
 		currentNode = currentNode->next;

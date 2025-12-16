@@ -1,5 +1,4 @@
 // ======================================================== //
-#pragma once
 #include "include/song.h"
 #include <iostream>
 #include <filesystem>
@@ -29,7 +28,7 @@ Song::Song(
 
 bool Song::loadMetadata() {
 	TagLib::FileRef f((filePath.data()));
-    if (f.isNull()) { std::cout << "Could not open file or no tags found: " << std::endl; return false; }
+    if (f.isNull()) { std::cout << "[ERROR] Could not open file or no tags found: " << std::endl; return false; }
 	if (!f.isNull() && f.tag()) {
 	  	TagLib::Tag *tag = f.tag();
 	    title 	= tag->title().toCString(true);
@@ -64,6 +63,7 @@ bool Song::playSong() {
 		return 0;
 	}
 
+	incrementPlayCount();
 	ma_engine_play_sound(&engine, filePath.c_str(), NULL);
 	printf("Press Enter to quit...");
 	ma_sleep(3000); // 3 seconds
