@@ -26,7 +26,10 @@ class Playlist {
 		void displayPlaylist();
 
 		void play();
-
+		void pause();
+		void stop();
+		void next();
+		void previous();
 		//getter and setter
 		string getName() const { return playlistName; }
 		void setName(const string& n) { playlistName = n; }

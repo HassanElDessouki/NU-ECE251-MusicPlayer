@@ -66,7 +66,7 @@ bool Song::playSong() {
 
 	ma_engine_play_sound(&engine, filePath.c_str(), NULL);
 	printf("Press Enter to quit...");
-	getchar();
+	ma_sleep(3000); // 3 seconds
 
 	ma_engine_uninit(&engine);
     return 1;

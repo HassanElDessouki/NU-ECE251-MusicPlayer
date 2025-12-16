@@ -132,6 +132,23 @@ void Playlist::play() {
 	} while (currentNode != head);
 	cout << endl;
 };
+void Playlist::pause() {
+    if (soundLoaded && !paused) {
+        ma_sound_set_paused(&currentSound, MA_TRUE);
+        paused = true;
+        std::cout << "Paused\n";
+    }
+}
+
+void Playlist::resume() {
+    if (soundLoaded && paused) {
+        ma_sound_set_paused(&currentSound, MA_FALSE);
+        paused = false;
+        std::cout << "Resumed\n";
+    }
+}
+
+
 
 void Playlist::importFolder(string folder) {
     for (const auto & entry : filesystem::directory_iterator(folder)) {
