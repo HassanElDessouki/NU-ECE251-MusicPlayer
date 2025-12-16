@@ -86,16 +86,18 @@ void Playlist::displayPlaylist() {
 }
 
 void Playlist::loadPlaylist() {
-	ifstream PlaylistData;       		// file stream "playlistData"
-	PlaylistData.open(playlistFile); 	// Load File
+	ifstream playlistData;       		// file stream "playlistData"
+	playlistData.open(playlistFile); 	// Load File
 
-	if (!PlaylistData.is_open()) {
+	if (!playlistData.is_open()) {
 		cout << "[ERROR] Could not open playlist file!" << endl;  // ← Add this
 		return;
 	}
 
 	string csvRow;
-	while(getline(PlaylistData, csvRow)) {
+	while(getline(playlistData, csvRow)) {
+		if (csvRow.empty()) continue;  // Skip empty lines
+
 		stringstream csvRowSS(csvRow); // Move Row to a String Stream
 		string cell;
 
@@ -104,18 +106,18 @@ void Playlist::loadPlaylist() {
 		string filePath, title, artist, album, genre;
 		int songID, songDuration, songPlayCount;
 		/* Seperate each value to its designated song struct variable */
-		getline(csvRowSS, cell, ','); filePath 			= cell;
-		getline(csvRowSS, cell, ','); songID 			= stoi(cell);
-		getline(csvRowSS, cell, ','); title 			= cell;
-		getline(csvRowSS, cell, ','); artist 			= cell;
-		getline(csvRowSS, cell, ','); album 			= cell;
-		getline(csvRowSS, cell, ','); genre 			= cell;
-		getline(csvRowSS, cell, ','); songDuration 		= stoi(cell);
-		getline(csvRowSS, cell, ','); songPlayCount 	= stoi(cell);
+		getline(csvRowSS, cell, ';'); filePath 			= cell;
+		getline(csvRowSS, cell, ';'); songID 			= stoi(cell);
+		getline(csvRowSS, cell, ';'); title 			= cell;
+		getline(csvRowSS, cell, ';'); artist 			= cell;
+		getline(csvRowSS, cell, ';'); album 			= cell;
+		getline(csvRowSS, cell, ';'); genre 			= cell;
+		getline(csvRowSS, cell, ';'); songDuration 		= stoi(cell);
+		getline(csvRowSS, cell, ';'); songPlayCount 	= stoi(cell);
 		Song* n = new Song(filePath, songID, title, artist, album, genre, songDuration, songPlayCount);
 		insertSong(n);
 	}
-	PlaylistData.close();
+	playlistData.close();
 }
 
 //
@@ -123,19 +125,24 @@ void Playlist::play() {
 	// otherwise, traverse through the list and print the values until the end of the list
 	PlaylistNode *currentNode = head;
 	do {
-          printf("Now playing %s\n", currentNode->song->getTitle().c_str());
+        printf("Now playing %s\n", currentNode->song->getTitle().c_str());
        	currentNode->song->playSong();
+        savePlaylist();
 		currentNode = currentNode->next;
 	} while (currentNode != head);
 	cout << endl;
 };
 
-void importFolder(string folder) {
+void Playlist::importFolder(string folder) {
     for (const auto & entry : filesystem::directory_iterator(folder)) {
         if (entry.path().extension() == ".mp3") {
-            return;
+        	Song* s = new Song(entry.path().string());
+        	s->loadMetadata();
+        	s->displayInfo();
+        	insertSong(s);
         }
     }
+	savePlaylist();
 }
 
 void Playlist::savePlaylist() {
@@ -157,11 +164,12 @@ void Playlist::savePlaylist() {
         songDuration = currentNode->song->getDuration();
         songPlayCount = currentNode->song->getPlayCount();
 
-		playlistSongDataStream << filePath << "," << songID << "," << title << "," << artist << "," << album << "," << genre << "," << songDuration << "," << songPlayCount;
+		playlistSongDataStream << filePath << ";" << songID << ";" << title << ";" << artist << ";" << album << ";" << genre << ";" << songDuration << ";" << songPlayCount;
         playlistData << playlistSongDataStream.str() << endl;
 		currentNode = currentNode->next;
 	} while (currentNode != head);
 
 	playlistData.close();
 }
+
 
