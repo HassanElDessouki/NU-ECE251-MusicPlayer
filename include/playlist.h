@@ -55,4 +55,8 @@ class Playlist {
 		// to find a specific song in the playlist by title/ID momken neshof anhy ashl w ne3mlha
 		int findSongByID(int songID) const;
 		int findSongByTitle(const string& title) const;
+
+		bool containsSong(const string& filePath) const;
+		void deletePlaylist();
+
 };
