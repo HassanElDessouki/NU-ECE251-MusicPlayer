@@ -70,4 +70,7 @@ class Playlist {
 
 		bool containsSong(const string& filePath) const;
 		void deletePlaylist();
+
+		bool toggleShuffle();
+		bool toggleRepeat();
 };
