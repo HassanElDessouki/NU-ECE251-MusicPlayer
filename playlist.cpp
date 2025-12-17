@@ -188,4 +188,26 @@ void Playlist::savePlaylist() {
 	playlistData.close();
 }
 
+void Playlist::deletePlaylist() {
+	ifstream playlistSettings("playlists.csv");
+	if (playlistSettings.is_open()) {
+		string csvRow;
+		while(getline(playlistSettings, csvRow)) {
+			if (csvRow.empty()) continue;  // Skip empty lines
 
+			stringstream csvRowSS(csvRow); // Move Row to a String Stream
+			string csvName, csvFile;
+			getline(csvRowSS, csvName, ';');
+			if (!(csvName == playlistName)) {
+				getline(csvRowSS, csvFile, ';');
+				ofstream playlistSettings("playlists.csv", ios::app);
+				playlistSettings << csvName << ";" << csvFile << endl;
+				playlistSettings.close();
+			}
+		}
+		playlistSettings.close();
+	} else {
+		cout << "[ERROR] Could not open settings file!" << endl;  // ← Add this
+		return;
+	}
+};
