@@ -25,6 +25,8 @@ void Playlist::insertSong(Song *song) {
 		head->prev->next = newNode;         //
 		head->prev = newNode;               //
 	}
+	totalDuration += song->getDuration();
+	songCount++;
 }
 
 void Playlist::deleteSong(Song *song) {
@@ -37,6 +39,9 @@ void Playlist::deleteSong(Song *song) {
 	if (head->next == head && head->song == song) {
 		delete head;
 		head = nullptr;
+
+		songCount--;
+		totalDuration -= song->getDuration();
 		return;
 	}
 	// check if head is the node to delete
@@ -46,6 +51,9 @@ void Playlist::deleteSong(Song *song) {
 		head->prev->next = newHead;         // set the next of the last node in the list to the newHead
 		delete head;                        // then delete the current head
 		head = newHead;                     // then set the head as the memory address of the next node
+
+		songCount--;
+		totalDuration -= song->getDuration();
 		return;
 	}
 	// otherwise, serarch for the node by traversing it
@@ -63,6 +71,8 @@ void Playlist::deleteSong(Song *song) {
 		toDeleteNode->prev->next = toDeleteNode->next;
 		toDeleteNode->next->prev = toDeleteNode->prev;
 		delete toDeleteNode;
+		songCount--;
+		totalDuration -= song->getDuration();
 	}
 }
 
@@ -99,6 +109,7 @@ void Playlist::loadPlaylist() {
 
 		stringstream csvRowSS(csvRow); // Move Row to a String Stream
 		string cell;
+
 
 		// DEBUG
 		// cout << csvRow << endl;
@@ -157,6 +168,8 @@ void Playlist::importFolder(string folder) {
         		Song* s = new Song(songFilePath);
         		s->loadMetadata();
         		insertSong(s);
+        		songCount++;
+        		totalDuration += s->getDuration();
         	} else {
         		cout << "[WARNING] MP3 file already exists in the playlist!" << endl;
         	}

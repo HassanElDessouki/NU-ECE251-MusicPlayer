@@ -2,7 +2,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
-#include "include/song.h"
+#include "song.h"
 
 using namespace std;
 
@@ -16,14 +16,28 @@ class Playlist {
 			PlaylistNode *prev;
 		};
 		PlaylistNode *head;
-		string dateCreated;
-		string dateModified;
+		int dateCreated;
 		int songCount;
 		int totalDuration;
+		bool playlistShuffle;
+		bool playlistRepeat;
 
 	public:
 		//constructor
-		Playlist(const string& n, const string& f) {playlistName = n; playlistFile = f; head = nullptr;};
+		Playlist(const string& n, const string& f) {
+			playlistName = n; playlistFile = f; head = nullptr;
+		};
+		Playlist(const string& n, const string& f, const int& d) {
+			playlistName = n;
+			playlistFile = f;
+			dateCreated = d;
+			songCount = 0;
+			totalDuration = 0;
+			playlistShuffle = false;
+			playlistRepeat = false;
+			head = nullptr;
+			loadPlaylist();
+		}
 
         void insertSong(Song *song);
 		void deleteSong(Song *song);
@@ -34,17 +48,15 @@ class Playlist {
 		void stop();
 		void next();
 		void previous();
+
 		//getter and setter
 		string getName() const { return playlistName; }
 		void setName(const string& n) { playlistName = n; }
 
-		// basic functions
-		void clear();
-
 		// getting Information
-		int getSize() const; //how many songs in playlist
-		bool isEmpty() const;
-		int getTotalDuration() const;
+		int getSize() const { return songCount; };			//how many songs in playlist
+		bool isEmpty() const {return songCount == 0; };
+		int getTotalDuration() const { return totalDuration; };
 
 		// displaying playlist
 		void loadPlaylist();
@@ -58,5 +70,4 @@ class Playlist {
 
 		bool containsSong(const string& filePath) const;
 		void deletePlaylist();
-
 };
