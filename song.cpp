@@ -23,7 +23,7 @@ Song::Song(
 	int dur,
     int pc
 )
-	: filePath(path), song_Id(id), title(t), artist(a), album(al), genre(g), duration(dur),playCount(pc) {
+	: filePath(path), songID(id), title(t), artist(a), album(al), genre(g), duration(dur),playCount(pc) {
 }
 
 bool Song::loadMetadata() {

@@ -10,7 +10,7 @@ class Song {
 		std::string album;
 		std::string genre;
 		int duration; // in sec
-		int song_Id;
+		int songID;
 		int playCount;
 
 	public:
@@ -33,7 +33,7 @@ class Song {
 		std::string getGenre() const { return genre; }
 		std::string getFile() const { return filePath; }
 		int getDuration() const { return duration; }
-		int getSongID() const { return song_Id; }
+		int getSongID() const { return songID; }
 		int getPlayCount() const { return playCount; }
 
 	//setter
