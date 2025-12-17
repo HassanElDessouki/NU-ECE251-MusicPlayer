@@ -142,7 +142,7 @@ bool playlistExists(const string& name) {
     return 0;
 };
 
-void toggleShuffle(const string& name) {
+void savePlaylistSettings(const string& name, const int& songCount, const int& totalDuration, const int& playlistShuffle, const int& playlistRepeat) {
     bool doesPlaylistExist = playlistExists(name);
     if (doesPlaylistExist) {
         ifstream playlistSettings("playlists.csv");
@@ -179,60 +179,14 @@ void toggleShuffle(const string& name) {
                 } else if (csvShuffle == 1) {
                     csvShuffle = 0;
                 }
+                csvSongCount = songCount;
+                csvTotalDuration = totalDuration;
+                csvShuffle = playlistShuffle;
+                csvRepeat = playlistRepeat;
             }
 
             stringstream playlistSettingsData;
-            playlistSettingsData << csvName << ";" << csvFile << ";" << csvDate << ";" << csvSongCount << ";" << csvTotalDuration << ";" << csvShuffle << ";" << csvRepeat <<  endl;
-            playlistSettingsLINES.push_back(playlistSettingsData.str());
-
-        }
-        playlistSettings.close();
-        ofstream playlistSettingsWR("playlists.csv");
-        for (const string& line : playlistSettingsLINES) {
-            playlistSettingsWR << line << endl;
-        }
-        playlistSettingsWR.close();
-    }
-}
-
-void toggleRepeat(const string& name) {
-    bool doesPlaylistExist = playlistExists(name);
-    if (doesPlaylistExist) {
-        ifstream playlistSettings("playlists.csv");
-
-        if (!playlistSettings.is_open()) {
-            cout << "[ERROR] Could not open playlist file!" << endl;
-            return;
-        }
-        vector<string> playlistSettingsLINES;
-        string csvRow;
-        while(getline(playlistSettings, csvRow)) {
-            if (csvRow.empty()) continue;  // Skip empty lines
-
-            stringstream csvRowSS(csvRow); // Move Row to a String Stream
-            string cell;
-
-            // DEBUG
-            // cout << csvRow << endl;
-            string csvName, csvFile;
-            int csvDate, csvSongCount, csvTotalDuration, csvShuffle, csvRepeat;
-
-            getline(csvRowSS, csvName, ';');
-            getline(csvRowSS, csvFile, ';');
-            getline(csvRowSS, cell, ';');       csvDate             = stoi(cell);
-            getline(csvRowSS, cell, ';');       csvSongCount        = stoi(cell);
-            getline(csvRowSS, cell, ';');       csvTotalDuration    = stoi(cell);
-            getline(csvRowSS, cell, ';');       csvShuffle          = stoi(cell);
-            getline(csvRowSS, cell, ';');       csvRepeat           = stoi(cell);
-            if (csvName == name) {
-                if (csvRepeat == 0) {
-                    csvRepeat = 1;
-                } else if (csvRepeat == 1) {
-                    csvRepeat = 0;
-                }
-            }
-            stringstream playlistSettingsData;
-            playlistSettingsData << csvName << ";" << csvFile << ";" << csvDate << ";" << csvSongCount << ";" << csvTotalDuration << ";" << csvShuffle << ";" << csvRepeat <<  endl;
+            playlistSettingsData << csvName << ";" << csvFile << ";" << csvDate << ";" << csvSongCount << ";" << csvTotalDuration << ";" << csvShuffle << ";" << csvRepeat;
             playlistSettingsLINES.push_back(playlistSettingsData.str());
 
         }
