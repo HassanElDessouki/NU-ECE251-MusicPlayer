@@ -242,3 +242,21 @@ void Playlist::deletePlaylist() {
 		return;
 	}
 };
+
+bool Playlist::toggleShuffle() {
+	if (playlistShuffle == 0) {
+		playlistShuffle = 1;
+	} else if (playlistShuffle == 1) {
+		playlistShuffle = 0;
+	}
+	return playlistShuffle;
+}
+
+bool Playlist::toggleRepeat() {
+	if (playlistRepeat == 0) {
+		playlistRepeat = 1;
+	} else if (playlistRepeat == 1) {
+		playlistRepeat = 0;
+	}
+	return playlistRepeat;
+}
