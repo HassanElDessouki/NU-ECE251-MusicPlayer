@@ -25,19 +25,18 @@ class Playlist {
 	public:
 		//constructor
 		Playlist(const string& n, const string& f) {
-			playlistName = n; playlistFile = f; head = nullptr;
-		};
-		Playlist(const string& n, const string& f, const int& d) {
 			playlistName = n;
 			playlistFile = f;
-			dateCreated = d;
+			head = nullptr;
+			dateCreated = 0;
 			songCount = 0;
 			totalDuration = 0;
-			playlistShuffle = false;
-			playlistRepeat = false;
-			head = nullptr;
+			playlistShuffle = 0;
+			playlistRepeat = 0;
+
 			loadPlaylist();
-		}
+			loadPlaylistSettings();
+		};
 
         void insertSong(Song *song);
 		void deleteSong(Song *song);
@@ -73,4 +72,6 @@ class Playlist {
 
 		bool toggleShuffle();
 		bool toggleRepeat();
+
+		void loadPlaylistSettings();
 };

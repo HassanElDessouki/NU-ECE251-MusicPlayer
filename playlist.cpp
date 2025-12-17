@@ -1,5 +1,6 @@
 // ======================================================== //
 #include "include/playlist.h"
+#include "include/playlistutils.h"
 #include "include/song.h"
 #include <string>
 #include <iostream>
@@ -27,6 +28,8 @@ void Playlist::insertSong(Song *song) {
 	}
 	totalDuration += song->getDuration();
 	songCount++;
+	savePlaylist();
+	savePlaylistSettings(playlistName, songCount, totalDuration, playlistRepeat, playlistShuffle);
 }
 
 void Playlist::deleteSong(Song *song) {
@@ -42,6 +45,8 @@ void Playlist::deleteSong(Song *song) {
 
 		songCount--;
 		totalDuration -= song->getDuration();
+		savePlaylist();
+		savePlaylistSettings(playlistName, songCount, totalDuration, playlistRepeat, playlistShuffle);
 		return;
 	}
 	// check if head is the node to delete
@@ -54,6 +59,8 @@ void Playlist::deleteSong(Song *song) {
 
 		songCount--;
 		totalDuration -= song->getDuration();
+		savePlaylist();
+		savePlaylistSettings(playlistName, songCount, totalDuration, playlistRepeat, playlistShuffle);
 		return;
 	}
 	// otherwise, serarch for the node by traversing it
@@ -73,6 +80,8 @@ void Playlist::deleteSong(Song *song) {
 		delete toDeleteNode;
 		songCount--;
 		totalDuration -= song->getDuration();
+		savePlaylist();
+		savePlaylistSettings(playlistName, songCount, totalDuration, playlistRepeat, playlistShuffle);
 	}
 }
 
@@ -85,11 +94,8 @@ void Playlist::displayPlaylist() {
 	// otherwise, traverse through the list and print the values until the end of the list
 	PlaylistNode *currentNode = head;
 	do {
-		cout << currentNode->song->getTitle();
+		cout << currentNode->song->getTitle() << "by " << currentNode->song->getArtist() << endl;
 		currentNode = currentNode->next;
-		if (currentNode != head) {
-			cout << "<->";              // this is so that we do not get an extra <-> at the end of the text :-)
-		}
 	} while (currentNode != head);
 	cout << endl;
 }
@@ -168,14 +174,11 @@ void Playlist::importFolder(string folder) {
         		Song* s = new Song(songFilePath);
         		s->loadMetadata();
         		insertSong(s);
-        		songCount++;
-        		totalDuration += s->getDuration();
         	} else {
         		cout << "[WARNING] MP3 file already exists in the playlist!" << endl;
         	}
         }
     }
-	savePlaylist();
 }
 
 bool Playlist::containsSong(const string& filePath) const {
@@ -218,30 +221,30 @@ void Playlist::savePlaylist() {
 
 	playlistData.close();
 }
-
-void Playlist::deletePlaylist() {
-	ifstream playlistSettings("playlists.csv");
-	if (playlistSettings.is_open()) {
-		string csvRow;
-		while(getline(playlistSettings, csvRow)) {
-			if (csvRow.empty()) continue;  // Skip empty lines
-
-			stringstream csvRowSS(csvRow); // Move Row to a String Stream
-			string csvName, csvFile;
-			getline(csvRowSS, csvName, ';');
-			if (!(csvName == playlistName)) {
-				getline(csvRowSS, csvFile, ';');
-				ofstream playlistSettings("playlists.csv", ios::app);
-				playlistSettings << csvName << ";" << csvFile << endl;
-				playlistSettings.close();
-			}
-		}
-		playlistSettings.close();
-	} else {
-		cout << "[ERROR] Could not open settings file!" << endl;  // ← Add this
-		return;
-	}
-};
+//
+// void Playlist::deletePlaylist() {
+// 	ifstream playlistSettings("playlists.csv");
+// 	if (playlistSettings.is_open()) {
+// 		string csvRow;
+// 		while(getline(playlistSettings, csvRow)) {
+// 			if (csvRow.empty()) continue;  // Skip empty lines
+//
+// 			stringstream csvRowSS(csvRow); // Move Row to a String Stream
+// 			string csvName, csvFile;
+// 			getline(csvRowSS, csvName, ';');
+// 			if (!(csvName == playlistName)) {
+// 				getline(csvRowSS, csvFile, ';');
+// 				ofstream playlistSettings("playlists.csv", ios::app);
+// 				playlistSettings << csvName << ";" << csvFile << endl;
+// 				playlistSettings.close();
+// 			}
+// 		}
+// 		playlistSettings.close();
+// 	} else {
+// 		cout << "[ERROR] Could not open settings file!" << endl;  // ← Add this
+// 		return;
+// 	}
+// };
 
 bool Playlist::toggleShuffle() {
 	if (playlistShuffle == 0) {
@@ -249,6 +252,8 @@ bool Playlist::toggleShuffle() {
 	} else if (playlistShuffle == 1) {
 		playlistShuffle = 0;
 	}
+
+	savePlaylistSettings(playlistName, songCount, totalDuration, playlistRepeat, playlistShuffle);
 	return playlistShuffle;
 }
 
@@ -258,5 +263,7 @@ bool Playlist::toggleRepeat() {
 	} else if (playlistRepeat == 1) {
 		playlistRepeat = 0;
 	}
+
+	savePlaylistSettings(playlistName, songCount, totalDuration, playlistRepeat, playlistShuffle);
 	return playlistRepeat;
 }

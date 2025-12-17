@@ -1,4 +1,5 @@
 // ======================================================== //
+#include "include/utils.h"
 #include "include/playlistutils.h"
 #include "include/playlist.h"
 #include "include/song.h"
@@ -8,34 +9,36 @@
 #include <fstream>
 #include <sstream>
 #include <filesystem>
+#include <ctime>
+// #DEFINE
 // ======================================================== //
 using namespace std;
 
-Playlist* createPlaylist(const string& name) {
+bool createPlaylist(const string& name) {
     string fileName = name + ".playlist";
-    bool existsInCSV = 0;
+    bool existsInCSV = playlistExists(name);
 
-    ifstream playlistSettings("playlists.csv");
-    if (playlistSettings.is_open()) {
-        string csvRow;
-        while(getline(playlistSettings, csvRow)) {
-            if (csvRow.empty()) continue;  // Skip empty lines
-
-            stringstream csvRowSS(csvRow); // Move Row to a String Stream
-            string csvName, csvFile;
-            getline(csvRowSS, csvName, ';');
-            getline(csvRowSS, csvFile, ';');
-
-            if (csvName == name) {
-                existsInCSV = 1;
-                break;
-            }
-        }
-        playlistSettings.close();
-    } else {
-        cout << "[ERROR] Could not open settings file!" << endl;  // ← Add this
-        return nullptr;
-    }
+    // ifstream playlistSettings("playlists.csv");
+    // if (playlistSettings.is_open()) {
+    //     string csvRow;
+    //     while(getline(playlistSettings, csvRow)) {
+    //         if (csvRow.empty()) continue;  // Skip empty lines
+    //
+    //         stringstream csvRowSS(csvRow); // Move Row to a String Stream
+    //         string cell;
+    //
+    //         getline(csvRowSS, cell, ';');
+    //
+    //         if (csvName == name) {
+    //             existsInCSV = 1;
+    //             break;
+    //         }
+    //     }
+    //     playlistSettings.close();
+    // } else {
+    //     cout << "[ERROR] Could not open settings file!" << endl;  // ← Add this
+    //     return 0;
+    // }
 
     bool fileExists = filesystem::exists(fileName);
 
@@ -44,11 +47,11 @@ Playlist* createPlaylist(const string& name) {
         file.close();
 
         ofstream playlistSettings("playlists.csv", ios::app);
-        playlistSettings << name << ";" << fileName << endl;
+        playlistSettings << name << ";" << fileName << ";" << epochTime() << ";0;0;0;0" <<  endl;
         playlistSettings.close();
 
-        cout << "[SUCCESS] Successfully created playlist" << endl;
-        return new Playlist(name, fileName);
+        // cout << "[SUCCESS] Successfully created playlist" << endl;
+        return 1;
     }
 
     if (existsInCSV && !fileExists) {
@@ -56,30 +59,29 @@ Playlist* createPlaylist(const string& name) {
         ofstream file(fileName);
         file.close();
 
-        cout << "[SUCCESS] Successfully created playlist file" << endl;
-        return new Playlist(name, fileName);
+        cout << "[INFO] Recreated playlist file" << endl;
+        return 1;
     }
 
     if (!existsInCSV && fileExists) {
         cout << "[ERROR] Playlist file exists, but does not exist in the settings file!" << endl;
         cout << "[INFO] Adding playlist to the settings file" << endl;
 
-        ofstream playlistSettingsWrite("playlists.csv", ios::app);
-        playlistSettingsWrite << name << ";" << fileName << endl;
-        playlistSettingsWrite.close();
+        ofstream playlistSettings("playlists.csv", ios::app);
+        playlistSettings << name << ";" << fileName << ";" << epochTime() << ";0;0;0;0" <<  endl;
+        playlistSettings.close();
 
-        cout << "[SUCCESS] Successfully added playlist back to the settings file" << endl;
-        return new Playlist(name, fileName);
+        cout << "[INFO] Added playlist back to the settings file" << endl;
+        return 1;
     }
 
     if (existsInCSV && fileExists) {
         cout << "[INFO] Playlist already exists: " << name << endl;
-        return new Playlist(name, fileName);
+        return 0;
     }
+    return 0;
 //        playlistSettingsWrite << name << ";" << fileName << ";" << dateCreated << ";" << dateModified << ";" << songCount << ";" << totalDuration << ";" << description << ";" << endl;
 };
-
-
 
 vector<string> listAllPlaylists()       {
     vector<string> playlists;
@@ -95,16 +97,10 @@ vector<string> listAllPlaylists()       {
         if (csvRow.empty()) continue;  // Skip empty lines
 
         stringstream csvRowSS(csvRow); // Move Row to a String Stream
-        string cell;
+        string csvName;
 
-        // DEBUG
-        // cout << csvRow << endl;
-        string playlistName, playlistFile;
-
-        /* Seperate each value to its designated playlist struct variable */
-        getline(csvRowSS, cell, ';'); playlistName 			= cell;
-        getline(csvRowSS, cell, ';'); playlistFile 			= cell;
-        playlists.push_back(playlistName);
+        getline(csvRowSS, csvName, ';');
+        playlists.push_back(csvName);
     }
     playlistSettings.close();
     return playlists;
@@ -127,17 +123,16 @@ bool playlistExists(const string& name) {
 
         // DEBUG
         // cout << csvRow << endl;
-        string playlistName, playlistFile;
 
         /* Seperate each value to its designated playlist struct variable */
-        getline(csvRowSS, cell, ';'); playlistName 			= cell;
-        getline(csvRowSS, cell, ';'); playlistFile 			= cell;
-        if (playlistName == name) {
-            cout << "Playlist was found" << endl;
+        getline(csvRowSS, cell, ';');
+        if (cell == name) {
+            playlistSettings.close();
+            // cout << "Playlist was found" << endl;
             return 1;
         }
     }
-    cout << "[ERROR] Could not find playlist!" << endl;
+    // cout << "[ERROR] Could not find playlist!" << endl;
     playlistSettings.close();
     return 0;
 };
