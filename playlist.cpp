@@ -116,6 +116,7 @@ void Playlist::loadPlaylist() {
 		Song* n = new Song(filePath, songID, title, artist, album, genre, songDuration, songPlayCount);
 		insertSong(n);
 	}
+	cout << "[INFO] Playlist loaded successfully" << endl;
 	playlistData.close();
 }
 
@@ -131,34 +132,51 @@ void Playlist::play() {
 	} while (currentNode != head);
 	cout << endl;
 };
-void Playlist::pause() {
-    if (soundLoaded && !paused) {
-        ma_sound_set_paused(&currentSound, MA_TRUE);
-        paused = true;
-        std::cout << "Paused\n";
-    }
-}
 
-void Playlist::resume() {
-    if (soundLoaded && paused) {
-        ma_sound_set_paused(&currentSound, MA_FALSE);
-        paused = false;
-        std::cout << "Resumed\n";
-    }
-}
-
-
+// void Playlist::pause() {
+//     if (soundLoaded && !paused) {
+//         ma_sound_set_paused(&currentSound, MA_TRUE);
+//         paused = true;
+//         std::cout << "Paused\n";
+//     }
+// }
+//
+// void Playlist::resume() {
+//     if (soundLoaded && paused) {
+//         ma_sound_set_paused(&currentSound, MA_FALSE);
+//         paused = false;
+//         std::cout << "Resumed\n";
+//     }
+// }
 
 void Playlist::importFolder(string folder) {
     for (const auto & entry : filesystem::directory_iterator(folder)) {
+    	string songFilePath = entry.path().string();
         if (entry.path().extension() == ".mp3") {
-        	Song* s = new Song(entry.path().string());
-        	s->loadMetadata();
-        	s->displayInfo();
-        	insertSong(s);
+        	if (!containsSong(songFilePath)) {
+        		Song* s = new Song(songFilePath);
+        		s->loadMetadata();
+        		insertSong(s);
+        	} else {
+        		cout << "[WARNING] MP3 file already exists in the playlist!" << endl;
+        	}
         }
     }
 	savePlaylist();
+}
+
+bool Playlist::containsSong(const string& filePath) const {
+	if (head == nullptr) return 0;
+
+	PlaylistNode* currentNode = head;
+	do {
+		if (currentNode->song->getFile() == filePath) {
+			return 1;  // Found it!
+		}
+		currentNode = currentNode->next;
+	} while (currentNode != head);
+
+	return 0;  // Not found
 }
 
 void Playlist::savePlaylist() {
