@@ -174,11 +174,6 @@ void savePlaylistSettings(const string& name, const int& songCount, const int& t
             getline(csvRowSS, cell, ';');       csvShuffle          = stoi(cell);
             getline(csvRowSS, cell, ';');       csvRepeat           = stoi(cell);
             if (csvName == name) {
-                if (csvShuffle == 0) {
-                    csvShuffle = 1;
-                } else if (csvShuffle == 1) {
-                    csvShuffle = 0;
-                }
                 csvSongCount = songCount;
                 csvTotalDuration = totalDuration;
                 csvShuffle = playlistShuffle;
