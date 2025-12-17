@@ -100,6 +100,42 @@ void Playlist::displayPlaylist() {
 	cout << endl;
 }
 
+void Playlist::loadPlaylistSettings() {
+	ifstream playlistSettings("playlists.csv");
+
+	if (!playlistSettings.is_open()) {
+		cout << "[ERROR] Could not open playlist file!" << endl;
+		return;
+	}
+
+	string csvRow;
+	while(getline(playlistSettings, csvRow)) {
+		if (csvRow.empty()) continue;  // Skip empty lines
+
+		stringstream csvRowSS(csvRow); // Move Row to a String Stream
+		string cell, csvName, csvFile;
+		int csvDate, csvSongCount, csvTotalDuration, csvShuffle, csvRepeat;
+
+		getline(csvRowSS, csvName, ';');
+		if (csvName != playlistName) continue;
+
+		getline(csvRowSS, csvFile, ';');
+		getline(csvRowSS, cell, ';');       csvDate             = stoi(cell);
+		getline(csvRowSS, cell, ';');       csvSongCount        = stoi(cell);
+		getline(csvRowSS, cell, ';');       csvTotalDuration    = stoi(cell);
+		getline(csvRowSS, cell, ';');       csvShuffle          = stoi(cell);
+		getline(csvRowSS, cell, ';');       csvRepeat           = stoi(cell);
+
+		dateCreated = csvDate;
+		songCount = csvSongCount;
+		totalDuration = csvTotalDuration;
+		playlistShuffle = csvShuffle;
+		playlistRepeat = csvRepeat;
+		break;
+	}
+	playlistSettings.close();
+}
+
 void Playlist::loadPlaylist() {
 	ifstream playlistData;       		// file stream "playlistData"
 	playlistData.open(playlistFile); 	// Load File
