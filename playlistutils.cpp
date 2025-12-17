@@ -13,63 +13,73 @@ using namespace std;
 
 Playlist* createPlaylist(const string& name) {
     string fileName = name + ".playlist";
+    bool existsInCSV = 0;
 
-    if (filesystem::exists(fileName)) {
-        ifstream playlistSettings("playlists.csv");
-
-        if (!playlistSettings.is_open()) {
-            cout << "[ERROR] Could not open settings file!" << endl;  // ← Add this
-            return nullptr;
-        }
-
+    ifstream playlistSettings("playlists.csv");
+    if (playlistSettings.is_open()) {
         string csvRow;
         while(getline(playlistSettings, csvRow)) {
             if (csvRow.empty()) continue;  // Skip empty lines
 
             stringstream csvRowSS(csvRow); // Move Row to a String Stream
-            string cell;
+            string csvName, csvFile;
+            getline(csvRowSS, csvName, ';');
+            getline(csvRowSS, csvFile, ';');
 
-            // DEBUG
-            if ((name + ";" + fileName) == csvRow) {
-                cout << "[WARNING] Playlist already exists!" << endl;
-                return nullptr;
+            if (csvName == name) {
+                existsInCSV = 1;
+                break;
             }
         }
         playlistSettings.close();
+    } else {
+        cout << "[ERROR] Could not open settings file!" << endl;  // ← Add this
+        return nullptr;
+    }
+
+    bool fileExists = filesystem::exists(fileName);
+
+    if (!existsInCSV && !fileExists) {
+        ofstream file(fileName);
+        file.close();
+
+        ofstream playlistSettings("playlists.csv", ios::app);
+        playlistSettings << name << ";" << fileName << endl;
+        playlistSettings.close();
+
+        cout << "[SUCCESS] Successfully created playlist" << endl;
+        return new Playlist(name, fileName);
+    }
+
+    if (existsInCSV && !fileExists) {
+        cout << "[ERROR] Playlist exists in settings file, but the file for the playlist could not be found!" << endl;
+        ofstream file(fileName);
+        file.close();
+
+        cout << "[SUCCESS] Successfully created playlist file" << endl;
+        return new Playlist(name, fileName);
+    }
+
+    if (!existsInCSV && fileExists) {
         cout << "[ERROR] Playlist file exists, but does not exist in the settings file!" << endl;
         cout << "[INFO] Adding playlist to the settings file" << endl;
 
         ofstream playlistSettingsWrite("playlists.csv", ios::app);
-//        playlistSettingsWrite << name << ";" << fileName << ";" << dateCreated << ";" << dateModified << ";" << songCount << ";" << totalDuration << ";" << description << ";" << endl;
         playlistSettingsWrite << name << ";" << fileName << endl;
-
         playlistSettingsWrite.close();
-        cout << "[SUCCESS] Successfully added playlist back to the settings file" << endl;
 
-        return nullptr;
-    }
-    try {
-        // Create Empty Playlist CSV
-        ofstream file(fileName);
-        file.close();
-        ofstream playlistSettings("playlists.csv", ios::app);
-        playlistSettings << name << ";" << fileName << endl;
-        playlistSettings.close();
-        cout << "[SUCCESS] Successfully created playlist" << endl;
+        cout << "[SUCCESS] Successfully added playlist back to the settings file" << endl;
         return new Playlist(name, fileName);
     }
-    catch (int errorCode) {
-        cout << "[ERROR] Unmapped error: " << errorCode << endl;
+
+    if (existsInCSV && fileExists) {
+        cout << "[INFO] Playlist already exists: " << name << endl;
+        return new Playlist(name, fileName);
     }
-    // error handling : if file does not exist but its already added to the settings file
-    // if settings file could not be opened
-    // if playlist file wasn't created
-    return nullptr;
+//        playlistSettingsWrite << name << ";" << fileName << ";" << dateCreated << ";" << dateModified << ";" << songCount << ";" << totalDuration << ";" << description << ";" << endl;
 };
 
-void deletePlaylist(const string& name) {
 
-};
 
 vector<string> listAllPlaylists()       {
     vector<string> playlists;
