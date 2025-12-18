@@ -137,7 +137,7 @@ bool playlistExists(const string& name) {
     return 0;
 };
 
-void savePlaylistSettings(const string& name, const int& songCount, const int& totalDuration, const int& playlistShuffle, const int& playlistRepeat) {
+void savePlaylistSettings(const string& name, int songCount, int totalDuration, int playlistShuffle, int playlistRepeat) {
     bool doesPlaylistExist = playlistExists(name);
     if (doesPlaylistExist) {
         ifstream playlistSettings("playlists.csv");
