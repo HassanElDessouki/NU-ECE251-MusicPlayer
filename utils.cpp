@@ -5,6 +5,7 @@
 #include <thread>
 #include <filesystem>
 #include <fstream>
+#include <ctime>
 
 using namespace std;
 string settingsFile = "playlists.csv";
@@ -43,7 +44,10 @@ long int epochTime() {
     time_t now = time(nullptr);
     return now;
 }
-string epochTimeStr();
+string epochTimeStr(long int epochTime) {
+    char* dt = ctime(&epochTime);
+    return dt;
+}
 
 // ========== MISCELLANOUS ===========
 void clearInput() {
@@ -231,7 +235,7 @@ void managePlaylist(Playlist& playlist) {
             case 8: // PLAYLIST INFO
                 clearScreen();
                 cout << "Playlist Name: " << playlist.getName() << endl;
-                cout << "Playlist Created on: " << playlist.getCreationDate() << endl;
+                cout << "Playlist Created on: " << epochTimeStr(playlist.getCreationDate()) << endl;
                 cout << "Playlist Songs Count: " << playlist.getSize() << endl;
                 cout << "Playlist Duration: " << playlist.getTotalDuration() << endl;
                 cout << endl;
