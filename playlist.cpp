@@ -281,30 +281,60 @@ void Playlist::savePlaylist() {
 
 	playlistData.close();
 }
-//
-// void Playlist::deletePlaylist() {
-// 	ifstream playlistSettings("playlists.csv");
-// 	if (playlistSettings.is_open()) {
-// 		string csvRow;
-// 		while(getline(playlistSettings, csvRow)) {
-// 			if (csvRow.empty()) continue;  // Skip empty lines
-//
-// 			stringstream csvRowSS(csvRow); // Move Row to a String Stream
-// 			string csvName, csvFile;
-// 			getline(csvRowSS, csvName, ';');
-// 			if (!(csvName == playlistName)) {
-// 				getline(csvRowSS, csvFile, ';');
-// 				ofstream playlistSettings("playlists.csv", ios::app);
-// 				playlistSettings << csvName << ";" << csvFile << endl;
-// 				playlistSettings.close();
-// 			}
-// 		}
-// 		playlistSettings.close();
-// 	} else {
-// 		cout << "[ERROR] Could not open settings file!" << endl;  // ← Add this
-// 		return;
-// 	}
-// };
+
+int Playlist::deletePlaylist() {
+    bool doesPlaylistExist = playlistExists(playlistName);
+	bool deleteStatus = 0;
+    if (doesPlaylistExist) {
+        ifstream playlistSettings("playlists.csv");
+
+        if (!playlistSettings.is_open()) {
+            cout << "[ERROR] Could not open playlist file!" << endl;
+            return 0;
+        }
+
+        vector<string> playlistSettingsLINES;
+        string csvRow;
+
+        while(getline(playlistSettings, csvRow)) {
+            if (csvRow.empty()) continue;  // Skip empty lines
+
+            stringstream csvRowSS(csvRow); // Move Row to a String Stream
+            string cell;
+
+            // DEBUG
+            // cout << csvRow << endl;
+            string csvName, csvFile;
+            int csvDate, csvSongCount, csvTotalDuration, csvShuffle, csvRepeat;
+
+            getline(csvRowSS, csvName, ';');
+
+        	if (csvName == playlistName) {
+        		remove(playlistFile.c_str());
+        		deleteStatus = 1;
+        		continue;
+        	}
+            getline(csvRowSS, csvFile, ';');
+            getline(csvRowSS, cell, ';');       csvDate             = stoi(cell);
+            getline(csvRowSS, cell, ';');       csvSongCount        = stoi(cell);
+            getline(csvRowSS, cell, ';');       csvTotalDuration    = stoi(cell);
+            getline(csvRowSS, cell, ';');       csvShuffle          = stoi(cell);
+            getline(csvRowSS, cell, ';');       csvRepeat           = stoi(cell);
+
+            stringstream playlistSettingsData;
+            playlistSettingsData << csvName << ";" << csvFile << ";" << csvDate << ";" << csvSongCount << ";" << csvTotalDuration << ";" << csvShuffle << ";" << csvRepeat;
+            playlistSettingsLINES.push_back(playlistSettingsData.str());
+
+        }
+        playlistSettings.close();
+        ofstream playlistSettingsWR("playlists.csv");
+        for (const string& line : playlistSettingsLINES) {
+            playlistSettingsWR << line << endl;
+        }
+        playlistSettingsWR.close();
+    	return deleteStatus;
+    }
+}
 
 bool Playlist::toggleShuffle() {
 	if (playlistShuffle == 0) {
