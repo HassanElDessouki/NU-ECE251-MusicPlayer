@@ -39,7 +39,7 @@ class Playlist {
 		};
 
         void insertSong(Song *song);
-		void deleteSong(Song *song);
+		int deleteSong(const string& songTitle);
 		void displayPlaylist();
 
 		void play();
@@ -59,19 +59,29 @@ class Playlist {
 
 		// displaying playlist
 		void loadPlaylist();
+		void loadPlaylistSettings();
 		void savePlaylist();
+		int deletePlaylist();
 
 		void importFolder(string folder);
 
-		// to find a specific song in the playlist by title/ID momken neshof anhy ashl w ne3mlha
-		int findSongByID(int songID) const;
-		int findSongByTitle(const string& title) const;
+		// to find a specific song in the playlist by title
+		int findSongByTitle(const string& title);
 
 		bool containsSong(const string& filePath) const;
-		void deletePlaylist();
 
 		bool toggleShuffle();
 		bool toggleRepeat();
+		~Playlist() {
+			if (head == nullptr) return;
 
-		void loadPlaylistSettings();
+			PlaylistNode *currentNode = head;
+			PlaylistNode *oldHead = head;
+			do {
+				PlaylistNode *tempNode = currentNode;
+				currentNode = currentNode->next;
+				delete tempNode->song;
+				delete tempNode;
+			} while (currentNode != oldHead);
+		}
 };
