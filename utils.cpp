@@ -11,8 +11,15 @@ string settingsFile = "playlists.csv";
 
 // ========= SCREEN OPTIONS ==========
 void clearScreen() {
-    cout << "\033[2J\033[1;1H";  // Clear screen + move cursor to top
+    #ifdef _WIN32
+        // for Windows compilers (cmd uses CLS) ---- why microsoft :/
+        system("cls");
+    #else
+        // for macOS/linux compilers <--- they use clear rather than CLS
+        system("clear");
+    #endif
 }
+
 void waitScreen() {
     std::this_thread::sleep_for(std::chrono::seconds(2));
 }
