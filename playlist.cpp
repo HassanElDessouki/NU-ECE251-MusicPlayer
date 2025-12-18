@@ -223,7 +223,7 @@ void Playlist::play() {
 		clearScreen();
 		// Display current song info
 		cout << "========================================" << endl;
-		cout << "               NOW PLAYING IN " << playlistName << endl;
+		cout << "  NOW PLAYING IN " << playlistName << endl;
 		cout << "========================================" << endl;
 		cout << "Title:  " << currentNode->song->getTitle() << endl;
 		cout << "Artist: " << currentNode->song->getArtist() << endl;
