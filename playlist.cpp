@@ -30,26 +30,27 @@ void Playlist::insertSong(Song *song) {
 	songCount++;
 }
 
-void Playlist::deleteSong(Song *song) {
+int Playlist::deleteSong(const string& songTitle) {
 	// if head is null, print message to user that the list is empty
 	if (head == nullptr) {
 		cout << "List is empty!" << endl;
-		return;
+		return 0;
 	}
 	// check if it's the only node
-	if (head->next == head && head->song == song) {
+	if (head->next == head && head->song->getTitle() == songTitle) {
 		delete head;
 		head = nullptr;
 
 		songCount--;
-		totalDuration -= song->getDuration();
+		totalDuration = 0;
 		savePlaylist();
 		savePlaylistSettings(playlistName, songCount, totalDuration, playlistShuffle, playlistRepeat);
 
-		return;
+		return 1;
 	}
 	// check if head is the node to delete
-	if (head->song == song) {                // if so, then the next node after the head becomes the new head
+	if (head->song->getTitle() == songTitle) {                // if so, then the next node after the head becomes the new head
+		int oldDuration = head->song->getDuration();
 		PlaylistNode *newHead = head->next;         // first store the memory address of the next node
 		newHead->prev = head->prev;         // set the previous of the newHead to be the last node
 		head->prev->next = newHead;         // set the next of the last node in the list to the newHead
@@ -57,32 +58,34 @@ void Playlist::deleteSong(Song *song) {
 		head = newHead;                     // then set the head as the memory address of the next node
 
 		songCount--;
-		totalDuration -= song->getDuration();
+		totalDuration -= oldDuration;
 		savePlaylist();
 		savePlaylistSettings(playlistName, songCount, totalDuration, playlistShuffle, playlistRepeat);
 
-		return;
+		return 1;
 	}
 	// otherwise, serarch for the node by traversing it
 	PlaylistNode *currentNode = head;
 	PlaylistNode *toDeleteNode = nullptr;
 	do {
-		if (currentNode->song == song) {
+		if (currentNode->song->getTitle() == songTitle) {
 			toDeleteNode = currentNode;
 		}
 		currentNode = currentNode->next;
 	} while (currentNode != head);
 	if (toDeleteNode == nullptr) {
-		cout << "Song node " << song->getTitle() << " does not exist" << endl;
+		cout << "Song with title " << songTitle << " does not exist" << endl;
+		return 0;
 	} else {
+		int oldDuration = toDeleteNode->song->getDuration();
 		toDeleteNode->prev->next = toDeleteNode->next;
 		toDeleteNode->next->prev = toDeleteNode->prev;
 		delete toDeleteNode;
 		songCount--;
-		totalDuration -= song->getDuration();
+		totalDuration -= oldDuration;
 		savePlaylist();
 		savePlaylistSettings(playlistName, songCount, totalDuration, playlistShuffle, playlistRepeat);
-
+		return 1;
 	}
 }
 
@@ -120,6 +123,9 @@ int Playlist::findSongByTitle(const string& title) {
 		}
 		currentNode = currentNode->next;
 	} while (currentNode != head);
+
+	cout << "[ERROR] Song not found!" << endl;
+	return 0;
 }
 
 void Playlist::loadPlaylistSettings() {
@@ -149,8 +155,8 @@ void Playlist::loadPlaylistSettings() {
 		getline(csvRowSS, cell, ';');       csvRepeat           = stoi(cell);
 
 		dateCreated = csvDate;
-		songCount = csvSongCount;
-		totalDuration = csvTotalDuration;
+		// songCount = csvSongCount;
+		// totalDuration = csvTotalDuration;
 		playlistShuffle = csvShuffle;
 		playlistRepeat = csvRepeat;
 		break;
