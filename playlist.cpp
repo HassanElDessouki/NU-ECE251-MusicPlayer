@@ -8,6 +8,8 @@
 #include <fstream>
 #include <sstream>
 #include <filesystem>
+
+#include "include/utils.h"
 // ======================================================== //
 
 using namespace std;
@@ -203,15 +205,95 @@ void Playlist::loadPlaylist() {
 
 //
 void Playlist::play() {
+	// TODO: AUTO ADVANCE TO NEXT SONG
+	if (head == nullptr) {
+		cout << "Playlist is empty!" << endl;
+		waitScreen();
+		return;
+	}
+
 	// otherwise, traverse through the list and print the values until the end of the list
 	PlaylistNode *currentNode = head;
-	do {
-        printf("Now playing %s by %s\n", currentNode->song->getTitle().c_str(), currentNode->song->getArtist().c_str());
-       	currentNode->song->playSong();
-        savePlaylist();
-		currentNode = currentNode->next;
-	} while (currentNode != head);
-	cout << endl;
+	bool pauseStatus = 0;
+	bool playStatus = 1;
+	bool playbackStatus = 1;
+
+	currentNode->song->playSong();
+	while (playbackStatus) {
+		// clearScreen();
+		// Display current song info
+		cout << "========================================" << endl;
+		cout << "               NOW PLAYING              " << endl;
+		cout << "========================================" << endl;
+		cout << "Title:  " << currentNode->song->getTitle() << endl;
+		cout << "Artist: " << currentNode->song->getArtist() << endl;
+		cout << "Album:  " << currentNode->song->getAlbum() << endl;
+		cout << endl;
+		cout << "Status: " << (pauseStatus ? "PAUSED" : "PLAYING") << endl;
+		cout << "========================================" << endl;
+		cout << endl;
+
+		cout << "CONTROLS:" << endl;
+		cout << "n - Next Song" << endl;
+		cout << "b - Previous Song" << endl;
+		cout << "p - " << (pauseStatus ? "Resume" : "Pause") << endl;
+		cout << "s - Stop and Return to Menu" << endl;
+		cout << endl;
+		cout << "Choose an option: ";
+
+		char choice;
+		cin >> choice;
+		clearInput();
+
+		switch (choice) {
+			case 'n':
+				currentNode->song->stopSong();
+				currentNode = currentNode->next;
+
+				if (currentNode == head && (playlistRepeat == 0)) {
+					cout << "Playlist Finished" << endl;
+					waitScreen();
+					playbackStatus = 0;
+				} else {
+					currentNode->song->playSong();
+					pauseStatus = 0;
+				}
+				break;
+
+			case 'b':
+				currentNode->song->stopSong();
+				currentNode = currentNode->prev;
+
+				currentNode->song->playSong();
+				pauseStatus = 0;
+				break;
+
+			case 'p':
+				if (pauseStatus == 0) {
+					currentNode->song->pauseSong();
+					pauseStatus = 1;
+				} else {
+					currentNode->song->resumeSong();
+					pauseStatus = 0;
+				}
+				break;
+
+			case 's':
+				clearScreen();
+				currentNode->song->stopSong();
+				currentNode->song->stopAudioEngine();
+
+				cout << "Returning to Playlist Menu..." << endl;
+				waitScreen();
+				playbackStatus = 0;
+				break;
+
+			default:
+				cout << "Invalid option!" << endl;
+				waitScreen();
+				clearScreen();
+		}
+	}
 };
 
 // void Playlist::pause() {
