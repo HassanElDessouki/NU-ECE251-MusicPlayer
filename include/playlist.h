@@ -50,12 +50,12 @@ class Playlist {
 
 		//getter and setter
 		string getName() const { return playlistName; }
-		void setName(const string& n) { playlistName = n; }
-
-		// getting Information
+		int getCreationDate() const { return dateCreated; };
 		int getSize() const { return songCount; };			//how many songs in playlist
-		bool isEmpty() const {return songCount == 0; };
+		bool isEmpty() const { return songCount == 0; };
 		int getTotalDuration() const { return totalDuration; };
+		int getShuffleStatus() const { return playlistShuffle; };
+		int getRepeatStatus() const { return playlistRepeat; };
 
 		// displaying playlist
 		void loadPlaylist();
