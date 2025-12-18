@@ -56,7 +56,9 @@ void Song::displayInfo() const {
 
 bool Song::playSong() {
 	ma_result result;
-
+	if (engineStatus == 1) {
+		ma_engine_uninit(&engine);
+	}
 	// Initialize the miniaudio engine. This creates an internal thread for audio playback.
 	result = ma_engine_init(NULL, &engine);
 	if (result != MA_SUCCESS) {
@@ -71,7 +73,45 @@ bool Song::playSong() {
 		ma_engine_uninit(&engine);
 		return 0;
 	}
-
+	if (soundStatus == 1) {
+		ma_sound_start(&sound);
+	}
 	ma_sound_start(&sound);
 	return 1;
 }
+
+void Song::pauseSong() {
+	ma_sound_stop(&sound);
+}
+
+void Song::resumeSong() {
+	ma_sound_start(&sound);
+}
+
+void Song::stopSong() {
+	ma_sound_stop(&sound);
+	ma_sound_seek_to_pcm_frame(&sound, 0);  // rewind to start
+}
+
+void Song::stopAudioEngine() {
+	ma_sound_uninit(&sound);
+	ma_engine_uninit(&engine);
+}
+
+// bool Song::playSong() {
+// 	ma_result result;
+// 	ma_engine engine;
+//
+// 	result = ma_engine_init(NULL, &engine);
+// 	if (result != MA_SUCCESS) {
+// 		return 0;
+// 	}
+//
+// 	incrementPlayCount();
+// 	ma_engine_play_sound(&engine, filePath.c_str(), NULL);
+// 	printf("Press Enter to quit...");
+// 	ma_sleep(3000); // 3 seconds
+//
+// 	ma_engine_uninit(&engine);
+//     return 1;
+// }
