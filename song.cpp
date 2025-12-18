@@ -54,6 +54,11 @@ void Song::displayInfo() const {
 	std::cout << "Play Count: " << playCount << std::endl;
 }
 
+bool Song::isPlaying() {
+	if (!soundStatus) return false;
+	return ma_sound_is_playing(&sound);
+}
+
 bool Song::playSong() {
 	// A LOT OF IMPROVEMENTS CAN BE MADE HERE TO MAKE SONG PLAYING EFFICENT, BUT FOR A SMALL PROJECT, THIS GETS THE JOB DONE :-)
 	// THIS IS A NOTE TO BE TAKEN IF IMPROVEMENTS WERE TO BE MADE LATER

@@ -58,6 +58,7 @@ class Song {
 		void displayInfo() const;
 
 	// Playback Options
+		bool isPlaying();
 		bool playSong();
 		void pauseSong();
 		void resumeSong();
