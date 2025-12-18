@@ -220,7 +220,7 @@ void Playlist::play() {
 
 	currentNode->song->playSong();
 	while (playbackStatus) {
-		// clearScreen();
+		clearScreen();
 		// Display current song info
 		cout << "========================================" << endl;
 		cout << "               NOW PLAYING              " << endl;
