@@ -157,7 +157,11 @@ void managePlaylist(Playlist& playlist) {
             {
                 clearScreen();
                 string filePath;
-                cout << "\nEnter MP3 File path: ";
+                cout << "==============================" << endl;
+                cout << "  Playlist: " << playlist.getName() << endl;
+                cout << "==============================" << endl;
+                cout << endl;
+                cout << "Enter MP3 File path: ";
                 getline(cin, filePath);
 
                 if (filesystem::exists(filePath)) {
@@ -178,14 +182,18 @@ void managePlaylist(Playlist& playlist) {
             {
                 clearScreen();
                 string songTitle;
-                cout << "\nEnter Song Title: ";
+                cout << "==============================" << endl;
+                cout << "  Playlist: " << playlist.getName() << endl;
+                cout << "==============================" << endl;
+                cout << endl;
+                cout << "Enter Song Title: ";
                 getline(cin, songTitle);
 
                 int deleteStatus = playlist.deleteSong(songTitle);
                 if (deleteStatus == 1) {
                     printf("Song %s has been deleted successfully!", songTitle.c_str());
                 } else {
-                    cout << "Song was not found!";
+                    // cout << "Song was not found!"; <<
                 }
                 waitScreen();
                 break;
@@ -197,7 +205,7 @@ void managePlaylist(Playlist& playlist) {
                 cout << "  Playlist: " << playlist.getName() << endl;
                 cout << "==============================" << endl;
                 cout << "Songs in playlist: " << playlist.getSize() << endl;
-                cout << "Duration of playlist: " << playlist.getTotalDuration() << endl;
+                cout << "Duration of playlist: " << durationStr(playlist.getTotalDuration()) << endl;
                 cout << endl;
             playlist.displayPlaylist();
             cout << endl;
@@ -208,6 +216,9 @@ void managePlaylist(Playlist& playlist) {
             case 5: // Enable/Disable Shuffle
                 {
                     clearScreen();
+                    cout << "==============================" << endl;
+                    cout << "  Playlist: " << playlist.getName() << endl;
+                    cout << "==============================" << endl;
                     bool shuffleStatus = playlist.toggleShuffle();
 
                     cout << endl;
@@ -225,6 +236,9 @@ void managePlaylist(Playlist& playlist) {
             case 6: // Enable/Disable Repeat
                 {
                     clearScreen();
+                    cout << "==============================" << endl;
+                    cout << "  Playlist: " << playlist.getName() << endl;
+                    cout << "==============================" << endl;
                     bool repeatStatus = playlist.toggleRepeat();
 
                     cout << endl;
@@ -243,7 +257,11 @@ void managePlaylist(Playlist& playlist) {
                 {
                     clearScreen();
                     string folderPath;
-                    cout << "\nEnter folder path: ";
+                    cout << "==============================" << endl;
+                    cout << "  Playlist: " << playlist.getName() << endl;
+                    cout << "==============================" << endl;
+                    cout << endl;
+                    cout << "Enter folder path: ";
                     getline(cin, folderPath);
                     playlist.importFolder(folderPath);
                     cout << "Folder imported successfully!" << endl;
@@ -253,10 +271,13 @@ void managePlaylist(Playlist& playlist) {
 
             case 8: // PLAYLIST INFO
                 clearScreen();
-                cout << "Playlist Name: " << playlist.getName() << endl;
-                cout << "Playlist Created on: " << epochTimeStr(playlist.getCreationDate()) << endl;
-                cout << "Playlist Songs Count: " << playlist.getSize() << endl;
-                cout << "Playlist Duration: " << durationStr(playlist.getTotalDuration()) << endl;
+                cout << "==============================" << endl;
+                cout << "  Playlist: " << playlist.getName() << endl;
+                cout << "==============================" << endl;
+                cout << endl;
+                cout << "Creation Date: " << epochTimeStr(playlist.getCreationDate()) << endl;
+                cout << "Songs Count: " << playlist.getSize() << endl;
+                cout << "Total Duration: " << durationStr(playlist.getTotalDuration()) << endl;
                 cout << endl;
                 int shuffleStatus, repeatStatus;
                 shuffleStatus = playlist.getShuffleStatus();
@@ -280,14 +301,20 @@ void managePlaylist(Playlist& playlist) {
             {
                 clearScreen();
                 int doubleCheck;
+                cout << "==============================" << endl;
+                cout << "  Playlist: " << playlist.getName() << endl;
+                cout << "==============================" << endl;
+                cout << endl;
                 cout << "Are you sure you want to delete the playlist? (this action is irreversable!)" << endl;
                 cout << "1. Yes" << endl;
                 cout << "2. No" << endl;
+                cout << endl;
                 cout << "Choose an option: ";
                 cin >> doubleCheck;
                 clearInput();
                 cout << endl;
                 if (doubleCheck == 1) {
+                    cout << endl;
                     int deleteStatus;
                     deleteStatus = playlist.deletePlaylist();
                     if (deleteStatus == 1) {
@@ -299,7 +326,9 @@ void managePlaylist(Playlist& playlist) {
                         waitScreen();
                     }
                 } else {
-                    cout << "Returning back" << endl;
+                    // clearScreen();
+                    cout << endl;
+                    cout << "Returning back..." << endl;
                     waitScreen();
                 }
                 break;

@@ -223,7 +223,7 @@ void Playlist::play() {
 		clearScreen();
 		// Display current song info
 		cout << "========================================" << endl;
-		cout << "               NOW PLAYING              " << endl;
+		cout << "               NOW PLAYING IN " << playlistName << endl;
 		cout << "========================================" << endl;
 		cout << "Title:  " << currentNode->song->getTitle() << endl;
 		cout << "Artist: " << currentNode->song->getArtist() << endl;
@@ -438,7 +438,6 @@ bool Playlist::toggleShuffle() {
 	}
 
 	savePlaylistSettings(playlistName, songCount, totalDuration, playlistShuffle, playlistRepeat);
-
 	return playlistShuffle;
 }
 
