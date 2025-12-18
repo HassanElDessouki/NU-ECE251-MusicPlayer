@@ -152,20 +152,15 @@ void managePlaylist(Playlist& playlist) {
             case 3: // Delete song
             {
                 clearScreen();
-                string filePath;
-                cout << "\nEnter MP3 File path: ";
-                getline(cin, filePath);
+                string songTitle;
+                cout << "\nEnter Song Title: ";
+                getline(cin, songTitle);
 
-                if (filesystem::exists(filePath)) {
-                    Song *s = new Song(filePath);
-                    s->loadMetadata();
-                    playlist.deleteSong(s);
-                    playlist.savePlaylist();
-                    savePlaylistSettings(playlist.getName(), playlist.getSize(), playlist.getTotalDuration(), playlist.getShuffleStatus(), playlist.getRepeatStatus());
-                    cout << "Song " << s->getTitle() << " by " << s->getArtist() << " has been imported successfully!" << endl;
-                    delete s;
+                int deleteStatus = playlist.deleteSong(songTitle);
+                if (deleteStatus == 1) {
+                    printf("Song %s has been deleted successfully!", songTitle.c_str());
                 } else {
-                    cout << "MP3 file not found!" << endl;
+                    cout << "Song was not found!";
                 }
                 break;
             }
@@ -175,6 +170,9 @@ void managePlaylist(Playlist& playlist) {
                 cout << endl;
                 cout << "======== Playlist Songs ========" << endl;
             playlist.displayPlaylist();
+            cout << endl;
+            cout << "Return back..." << endl;
+            getchar();
             break;
 
             case 5: // Enable/Disable Shuffle
@@ -256,6 +254,8 @@ void managePlaylist(Playlist& playlist) {
                 cout << "2. No" << endl;
                 cout << "Choose an option: ";
                 cin >> doubleCheck;
+                clearInput();
+                cout << endl;
                 if (doubleCheck == 1) {
                     int deleteStatus;
                     deleteStatus = playlist.deletePlaylist();
@@ -271,6 +271,7 @@ void managePlaylist(Playlist& playlist) {
                     cout << "Returning back" << endl;
                     waitScreen();
                 }
+                break;
             }
 
             case 0: // Return to main menu
