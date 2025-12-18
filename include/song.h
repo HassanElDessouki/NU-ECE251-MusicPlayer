@@ -46,5 +46,11 @@ class Song {
 		void incrementPlayCount(){playCount++;}
 		bool loadMetadata();
 		void displayInfo() const;
+
+	// Playback Options
 		bool playSong();
+		void pauseSong();
+		void resumeSong();
+		void stopSong();
+		void stopAudioEngine();
 };
