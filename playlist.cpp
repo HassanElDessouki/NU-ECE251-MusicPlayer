@@ -28,8 +28,6 @@ void Playlist::insertSong(Song *song) {
 	}
 	totalDuration += song->getDuration();
 	songCount++;
-	savePlaylist();
-	savePlaylistSettings(playlistName, songCount, totalDuration, playlistRepeat, playlistShuffle);
 }
 
 void Playlist::deleteSong(Song *song) {
@@ -46,7 +44,8 @@ void Playlist::deleteSong(Song *song) {
 		songCount--;
 		totalDuration -= song->getDuration();
 		savePlaylist();
-		savePlaylistSettings(playlistName, songCount, totalDuration, playlistRepeat, playlistShuffle);
+		savePlaylistSettings(playlistName, songCount, totalDuration, playlistShuffle, playlistRepeat);
+
 		return;
 	}
 	// check if head is the node to delete
@@ -60,7 +59,8 @@ void Playlist::deleteSong(Song *song) {
 		songCount--;
 		totalDuration -= song->getDuration();
 		savePlaylist();
-		savePlaylistSettings(playlistName, songCount, totalDuration, playlistRepeat, playlistShuffle);
+		savePlaylistSettings(playlistName, songCount, totalDuration, playlistShuffle, playlistRepeat);
+
 		return;
 	}
 	// otherwise, serarch for the node by traversing it
@@ -81,7 +81,8 @@ void Playlist::deleteSong(Song *song) {
 		songCount--;
 		totalDuration -= song->getDuration();
 		savePlaylist();
-		savePlaylistSettings(playlistName, songCount, totalDuration, playlistRepeat, playlistShuffle);
+		savePlaylistSettings(playlistName, songCount, totalDuration, playlistShuffle, playlistRepeat);
+
 	}
 }
 
@@ -94,7 +95,7 @@ void Playlist::displayPlaylist() {
 	// otherwise, traverse through the list and print the values until the end of the list
 	PlaylistNode *currentNode = head;
 	do {
-		cout << currentNode->song->getTitle() << "by " << currentNode->song->getArtist() << endl;
+		cout << currentNode->song->getTitle() << " by " << currentNode->song->getArtist() << endl;
 		currentNode = currentNode->next;
 	} while (currentNode != head);
 	cout << endl;
@@ -215,6 +216,8 @@ void Playlist::importFolder(string folder) {
         	}
         }
     }
+	savePlaylist();
+	savePlaylistSettings(playlistName, songCount, totalDuration, playlistShuffle, playlistRepeat);
 }
 
 bool Playlist::containsSong(const string& filePath) const {
@@ -289,7 +292,8 @@ bool Playlist::toggleShuffle() {
 		playlistShuffle = 0;
 	}
 
-	savePlaylistSettings(playlistName, songCount, totalDuration, playlistRepeat, playlistShuffle);
+	savePlaylistSettings(playlistName, songCount, totalDuration, playlistShuffle, playlistRepeat);
+
 	return playlistShuffle;
 }
 
@@ -300,6 +304,7 @@ bool Playlist::toggleRepeat() {
 		playlistRepeat = 0;
 	}
 
-	savePlaylistSettings(playlistName, songCount, totalDuration, playlistRepeat, playlistShuffle);
+	savePlaylistSettings(playlistName, songCount, totalDuration, playlistShuffle, playlistRepeat);
+
 	return playlistRepeat;
 }
