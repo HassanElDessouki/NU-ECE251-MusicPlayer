@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <iostream>
+#include "../miniaudio/miniaudio.h"
 
 class Song {
 	private:
@@ -12,6 +13,12 @@ class Song {
 		int duration; // in sec
 		int songID;
 		int playCount;
+
+		ma_engine engine;
+		bool engineStatus;
+
+		ma_sound sound;
+		bool soundStatus;
 
 	public:
 		//constructor
