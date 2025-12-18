@@ -15,10 +15,9 @@ class Song {
 		int playCount;
 
 		ma_engine engine;
-		bool engineStatus;
-
+		bool engineStatus = 0;
 		ma_sound sound;
-		bool soundStatus;
+		bool soundStatus = 0;
 
 	public:
 		//constructor
@@ -32,6 +31,10 @@ class Song {
 			int dur = 0,
 			int pc = 0
         );
+
+		~Song() {
+			stopAudioEngine();
+		};
 
 	//getter
 		std::string getTitle() const { return title; }

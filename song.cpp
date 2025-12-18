@@ -55,16 +55,20 @@ void Song::displayInfo() const {
 }
 
 bool Song::playSong() {
+	// A LOT OF IMPROVEMENTS CAN BE MADE HERE TO MAKE SONG PLAYING EFFICENT, BUT FOR A SMALL PROJECT, THIS GETS THE JOB DONE :-)
+	// THIS IS A NOTE TO BE TAKEN IF IMPROVEMENTS WERE TO BE MADE LATER
+	// MINIAUDIO Audio Engine is uninitalized and then initalized again every single time an audio is played, hence the inefficiency
 	ma_result result;
-	if (engineStatus == 1) {
-		ma_engine_uninit(&engine);
-	}
+	stopAudioEngine();
+
 	// Initialize the miniaudio engine. This creates an internal thread for audio playback.
 	result = ma_engine_init(NULL, &engine);
 	if (result != MA_SUCCESS) {
 		std::cerr << "Failed to initialize audio engine." << std::endl;
 		return 0;
 	}
+
+	engineStatus = 1;
 
 	// Play the sound asynchronously. This function returns immediately.
 	result = ma_sound_init_from_file(&engine, filePath.c_str(), MA_SOUND_FLAG_STREAM, NULL, NULL, &sound);
@@ -73,9 +77,9 @@ bool Song::playSong() {
 		ma_engine_uninit(&engine);
 		return 0;
 	}
-	if (soundStatus == 1) {
-		ma_sound_start(&sound);
-	}
+
+	soundStatus = 1;
+
 	ma_sound_start(&sound);
 	return 1;
 }
@@ -94,8 +98,14 @@ void Song::stopSong() {
 }
 
 void Song::stopAudioEngine() {
-	ma_sound_uninit(&sound);
-	ma_engine_uninit(&engine);
+	if (soundStatus) {
+		ma_sound_uninit(&sound);
+		soundStatus = 0;
+	}
+	if (engineStatus) {
+		ma_engine_uninit(&engine);
+		engineStatus = 0;
+	}
 }
 
 // bool Song::playSong() {
