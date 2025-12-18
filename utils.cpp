@@ -199,6 +199,7 @@ void managePlaylist(Playlist& playlist) {
                     } else {
                         cout << "Enabled";
                     }
+                    cout << endl;
                     waitScreen();
                     break;
                 }
@@ -215,6 +216,7 @@ void managePlaylist(Playlist& playlist) {
                     } else {
                         cout << "Enabled";
                     }
+                    cout << endl;
                     waitScreen();
 
                     break;
