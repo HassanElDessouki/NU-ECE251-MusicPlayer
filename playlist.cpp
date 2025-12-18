@@ -219,6 +219,29 @@ void Playlist::play() {
 	bool playbackStatus = 1;
 
 	currentNode->song->playSong();
+
+	// BACKGROUND THREAD - Watches for song finish
+	thread autoAdvanceThread([&]() {
+		while (playbackStatus) {
+			this_thread::sleep_for(chrono::seconds(1));  // Check every second
+
+			if (playbackStatus && !pauseStatus && !currentNode->song->isPlaying()) {
+				// Song finished!
+				savePlaylist();
+				currentNode = currentNode->next;
+
+				if (currentNode == head && !playlistRepeat) {
+					// Playlist finished
+					playbackStatus = 0;
+				} else {
+					// Play next song
+					currentNode->song->playSong();
+					redrawScreen = 1;  // Signal to redraw screen
+				}
+			}
+		}
+	});
+
 	while (playbackStatus) {
 		clearScreen();
 		// Display current song info
