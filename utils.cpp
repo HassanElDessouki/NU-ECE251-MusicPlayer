@@ -174,6 +174,7 @@ void managePlaylist(Playlist& playlist) {
                 } else {
                     cout << "Song was not found!";
                 }
+                waitScreen();
                 break;
             }
 
