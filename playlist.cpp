@@ -260,6 +260,12 @@ void Playlist::savePlaylist() {
 	playlistData.open(playlistFile); // Load File
 
 	PlaylistNode *currentNode = head;
+
+	if (currentNode == nullptr) {
+		playlistData.close();
+		return;
+	}
+
 	do {
 		stringstream playlistSongDataStream;
 
