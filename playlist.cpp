@@ -101,6 +101,27 @@ void Playlist::displayPlaylist() {
 	cout << endl;
 }
 
+int Playlist::findSongByTitle(const string& title) {
+	// if head is null, print message to user that the list is empty
+	if (head == nullptr) {
+		cout << "Playlist is empty!" << endl;
+		return 0;
+	}
+	// otherwise, traverse through the list and print the values until the end of the list
+	PlaylistNode *currentNode = head;
+	do {
+		if (currentNode->song->getTitle() == title) {
+			cout << "==============" << currentNode->song->getTitle() << "==============" << endl;
+			cout << "Artist: "		<< currentNode->song->getArtist() << endl;
+			cout << "Album: "		<< currentNode->song->getAlbum() << endl;
+			cout << "Genre: "		<< currentNode->song->getGenre() << endl;
+			cout << "Duration: "	<< currentNode->song->getDuration() << endl;
+			return 1;
+		}
+		currentNode = currentNode->next;
+	} while (currentNode != head);
+}
+
 void Playlist::loadPlaylistSettings() {
 	ifstream playlistSettings("playlists.csv");
 
