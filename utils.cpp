@@ -124,7 +124,8 @@ void managePlaylist(Playlist& playlist) {
 
         switch (choice) {
             case 1: // Play playlist
-                cout << "\n--- Playing Playlist ---" << endl;
+                clearScreen();
+                cout << "======== Playing Playlist ========" << endl;
             playlist.play();
             break;
 
