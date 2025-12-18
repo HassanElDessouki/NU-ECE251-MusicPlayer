@@ -49,6 +49,19 @@ string epochTimeStr(long int epochTime) {
     return dt;
 }
 
+string durationStr(int durationSeconds) {
+    stringstream durationSS;
+
+    long hours = durationSeconds / 3600;
+    long minutes = (durationSeconds % 3600) / 60;
+    long seconds = durationSeconds % 60;
+
+    durationSS << std::setfill('0') << std::setw(2) << hours << ":"
+              << std::setw(2) << minutes << ":"
+              << std::setw(2) << seconds << std::endl;
+    return durationSS.str();
+}
+
 // ========== MISCELLANOUS ===========
 void clearInput() {
     cin.clear();
@@ -243,7 +256,7 @@ void managePlaylist(Playlist& playlist) {
                 cout << "Playlist Name: " << playlist.getName() << endl;
                 cout << "Playlist Created on: " << epochTimeStr(playlist.getCreationDate()) << endl;
                 cout << "Playlist Songs Count: " << playlist.getSize() << endl;
-                cout << "Playlist Duration: " << playlist.getTotalDuration() << endl;
+                cout << "Playlist Duration: " << durationStr(playlist.getTotalDuration()) << endl;
                 cout << endl;
                 int shuffleStatus, repeatStatus;
                 shuffleStatus = playlist.getShuffleStatus();

@@ -15,6 +15,7 @@ void initalRunChecks();
 // ========== TIME OPTIONS ===========
 long int epochTime();
 string epochTimeStr(long int& epochTime);
+string durationStr(int durationSeconds);
 
 // ========== MISCELLANOUS ===========
 void clearInput();
