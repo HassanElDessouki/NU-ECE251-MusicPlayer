@@ -56,18 +56,22 @@ void Song::displayInfo() const {
 
 bool Song::playSong() {
 	ma_result result;
-	ma_engine engine;
 
+	// Initialize the miniaudio engine. This creates an internal thread for audio playback.
 	result = ma_engine_init(NULL, &engine);
 	if (result != MA_SUCCESS) {
+		std::cerr << "Failed to initialize audio engine." << std::endl;
 		return 0;
 	}
 
-	incrementPlayCount();
-	ma_engine_play_sound(&engine, filePath.c_str(), NULL);
-	printf("Press Enter to quit...");
-	ma_sleep(3000); // 3 seconds
+	// Play the sound asynchronously. This function returns immediately.
+	result = ma_sound_init_from_file(&engine, filePath.c_str(), MA_SOUND_FLAG_STREAM, NULL, NULL, &sound);
+	if (result != MA_SUCCESS) {
+		std::cerr << "Failed to play sound: " << result << std::endl;
+		ma_engine_uninit(&engine);
+		return 0;
+	}
 
-	ma_engine_uninit(&engine);
-    return 1;
+	ma_sound_start(&sound);
+	return 1;
 }
