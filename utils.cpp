@@ -76,9 +76,9 @@ void createPlaylistScreen() {
     waitScreen();
 }
 int showMainMenuScreen(vector<string>& playlists) {
-    cout << "\n========================================" << endl;
-    cout << "          MUSIC PLAYER MENU" << endl;
-    cout << "========================================" << endl;
+    cout << "==============================" << endl;
+    cout << "         MPLAYER MENU         " << endl;
+    cout << "==============================" << endl;
 
     if (!playlists.empty()) {
         cout << "\nPlaylists:" << endl;
@@ -136,7 +136,7 @@ void managePlaylist(Playlist& playlist) {
         switch (choice) {
             case 1: // Play playlist
                 clearScreen();
-                cout << "======== Playing Playlist ========" << endl;
+                cout << "======== Loading Playlist ========" << endl;
             playlist.play();
             break;
 
@@ -179,8 +179,12 @@ void managePlaylist(Playlist& playlist) {
 
             case 4: // List playlist items
                 clearScreen();
+                cout << "==============================" << endl;
+                cout << "  Playlist: " << playlist.getName() << endl;
+                cout << "==============================" << endl;
+                cout << "Songs in playlist: " << playlist.getSize() << endl;
+                cout << "Duration of playlist: " << playlist.getTotalDuration() << endl;
                 cout << endl;
-                cout << "======== Playlist Songs ========" << endl;
             playlist.displayPlaylist();
             cout << endl;
             cout << "Return back..." << endl;
@@ -218,7 +222,6 @@ void managePlaylist(Playlist& playlist) {
                     }
                     cout << endl;
                     waitScreen();
-
                     break;
                 }
 
