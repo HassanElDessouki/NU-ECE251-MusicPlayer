@@ -231,6 +231,7 @@ void managePlaylist(Playlist& playlist) {
                         cout << "Enabled";
                     }
                     cout << endl;
+                    cout << "NOTE: Playlist Shuffle has not been implemented yet due to time constraints :-(" << endl;
                     waitScreen();
                     break;
                 }
@@ -290,11 +291,13 @@ void managePlaylist(Playlist& playlist) {
                 } else {
                     cout << "Shuffle Status: Enabled" << endl;
                 }
+
                 if (repeatStatus == 0) {
                     cout << "Repeat Status: Disabled" << endl;
                 } else {
                     cout << "Repeat Status: Enabled" << endl;
                 }
+                cout << "NOTE: Playlist Shuffle has not been implemented yet due to time constraints :-(" << endl;
                 cout << endl;
                 cout << "Return back..." << endl;
                 getchar();
