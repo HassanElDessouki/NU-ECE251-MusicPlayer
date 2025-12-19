@@ -287,6 +287,7 @@ void Playlist::play() {
 					// cout << "Playlist Finished" << endl;
 					// waitScreen();
 					playbackStatus = 0;
+					playlistFinished = 1;
 				} else {
 					currentNode->song->playSong();
 					pauseStatus = 0;
@@ -339,7 +340,9 @@ void Playlist::play() {
 	savePlaylist();
 
 	clearScreen();
-	if (playlistFinished && !playlistRepeat) {cout << "You have reached the end of the playlist!";}
+	if (playlistFinished) {
+		cout << "You have reached the end of the playlist!" << endl;
+	}
 	cout << "Returning to Playlist Menu..." << endl;
 	waitScreen();
 };
