@@ -194,6 +194,7 @@ void managePlaylist(Playlist& playlist) {
                 int deleteStatus = playlist.deleteSong(songTitle);
                 if (deleteStatus == 1) {
                     printf("Song %s has been deleted successfully!", songTitle.c_str());
+                    cout << endl;
                 } else {
                     // cout << "Song was not found!"; <<
                 }
