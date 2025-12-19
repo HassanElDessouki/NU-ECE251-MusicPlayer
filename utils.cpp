@@ -45,7 +45,8 @@ long int epochTime() {
     return now;
 }
 string epochTimeStr(long int epochTime) {
-    char* dt = ctime(&epochTime);
+    time_t timeTconverted = epochTime;
+    char* dt = ctime(&timeTconverted);
     return dt;
 }
 
