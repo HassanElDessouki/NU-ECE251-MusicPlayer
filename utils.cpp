@@ -162,6 +162,7 @@ void managePlaylist(Playlist& playlist) {
                 cout << "  Playlist: " << playlist.getName() << endl;
                 cout << "==============================" << endl;
                 cout << endl;
+                cout << "ex: D:/MyMusic/Pink Floyd - Another Brick in the Wall.mp3" << endl;
                 cout << "Enter MP3 File path: ";
                 getline(cin, filePath);
 
@@ -262,6 +263,7 @@ void managePlaylist(Playlist& playlist) {
                     cout << "  Playlist: " << playlist.getName() << endl;
                     cout << "==============================" << endl;
                     cout << endl;
+                    cout << "ex: D:/MAX Mix" << endl;
                     cout << "Enter folder path: ";
                     getline(cin, folderPath);
                     playlist.importFolder(folderPath);
