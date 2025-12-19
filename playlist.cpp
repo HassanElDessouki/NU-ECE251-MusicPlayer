@@ -239,6 +239,7 @@ void Playlist::play() {
 				} else {
 					// Play next song
 					currentNode->song->playSong();
+					savePlaylist();
 					redrawScreen = 1;  // Signal to redraw screen
 				}
 			}
