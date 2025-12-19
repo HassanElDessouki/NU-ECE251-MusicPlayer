@@ -102,7 +102,7 @@ void Playlist::displayPlaylist() {
 	// otherwise, traverse through the list and print the values until the end of the list
 	PlaylistNode *currentNode = head;
 	do {
-		cout << currentNode->song->getTitle() << " by " << currentNode->song->getArtist() << endl;
+		cout << currentNode->song->getTitle() << " by " << currentNode->song->getArtist() << " - Played: " << currentNode->song->getPlayCount() << " times"  << endl;
 		currentNode = currentNode->next;
 	} while (currentNode != head);
 	cout << endl;
