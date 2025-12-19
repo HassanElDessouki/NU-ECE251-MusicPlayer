@@ -296,6 +296,14 @@ void Playlist::play() {
 				break;
 
 			case 'b':
+				if (currentNode->prev == head->prev) {
+					cout << endl;
+					cout << "Cannot go back further!" << endl;
+					cout << "You are at the first song of the playlist :-)" << endl;
+					waitScreen();
+					redrawScreen = 1;
+					break;
+				}
 				currentNode->song->stopSong();
 				currentNode->song->stopAudioEngine();
 				currentNode = currentNode->prev;
