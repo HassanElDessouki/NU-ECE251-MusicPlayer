@@ -457,6 +457,8 @@ int Playlist::deletePlaylist() {
         playlistSettingsWR.close();
     	return deleteStatus;
     }
+    cout << "[ERROR] Playlist does not exist!";
+	return deleteStatus;
 }
 
 bool Playlist::toggleShuffle() {
