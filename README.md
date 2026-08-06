@@ -1,6 +1,6 @@
 # Music Player 
 
-A CLI music player written in C++ as a project for the course **ECE251: Data Structures and Algorithms** at *Nile University*.
+A CLI music player written in C++ as a team project for the course **ECE251: Data Structures and Algorithms** at *Nile University*.
 
 The project explores the use of custom data structures in a practical application. Songs within each playlist are stored using a circular doubly linked list, while playlist and song information is persisted locally between sessions.
 
